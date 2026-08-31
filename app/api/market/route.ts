@@ -50,6 +50,7 @@ async function getText(url: string) {
       cache: "no-store",
       headers: {
         accept: "text/html,application/xhtml+xml",
+        "accept-language": "ja,en;q=0.8",
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/131 Safari/537.36",
       },
     });
@@ -75,39 +76,30 @@ function htmlToText(html: string) {
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;|&#160;/gi, " ")
     .replace(/&amp;/gi, "&")
-    .replace(/&dollar;|&#36;/gi, "$")
-    .replace(/&#x24;/gi, "$")
+    .replace(/&dollar;|&#36;|&#x24;/gi, "$")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function parseDollarAfter(text: string, label: RegExp, windowSize = 420): number | null {
-  const match = label.exec(text);
-  if (!match || match.index === undefined) return null;
-  const window = text.slice(match.index + match[0].length, match.index + match[0].length + windowSize);
-  const dollar = window.match(/\$\s*([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?(?:e[+-]?\d+)?)/i);
-  return dollar ? numberFrom(dollar[1]) : null;
+function firstNumberAfter(text: string, labels: RegExp[], windowSize = 240): number | null {
+  for (const label of labels) {
+    const match = label.exec(text);
+    if (!match || match.index === undefined) continue;
+    const window = text.slice(match.index + match[0].length, match.index + match[0].length + windowSize);
+    const numberMatch = window.match(/\$?\s*([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?)/);
+    if (numberMatch) return numberFrom(numberMatch[1]);
+  }
+  return null;
 }
 
-function parseHolders(text: string): number | null {
-  const match = /\bHolders\b/i.exec(text);
-  if (!match || match.index === undefined) return null;
-  const window = text.slice(match.index + match[0].length, match.index + match[0].length + 180);
-  const amount = window.match(/([0-9]+(?:,[0-9]{3})*)/);
-  return amount ? numberFrom(amount[1]) : null;
-}
-
-function parseTokenPage(html: string) {
+function parseLocalizedArcscan(html: string) {
   if (!html) return { price: null, marketCap: null, liquidity: null, holders: null };
   const text = htmlToText(html);
 
-  const price = parseDollarAfter(text, /\bPrice\b/i, 260);
-  const marketCap = parseDollarAfter(text, /\bOn\s*chain\s+Market\s+Cap\b|\bOnchain\s+Market\s+Cap\b|\bMarket\s+Cap\b/i, 300);
-
-  const depthMatch = text.match(/\bdepth\s*\$\s*([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?)/i);
-  const liquidityLabel = parseDollarAfter(text, /\bLiquidity\b|\bPool\s+Depth\b/i, 260);
-  const liquidity = depthMatch ? numberFrom(depthMatch[1]) : liquidityLabel;
-  const holders = parseHolders(text);
+  const price = firstNumberAfter(text, [/価格/i, /\bPrice\b/i], 160);
+  const marketCap = firstNumberAfter(text, [/オンチェーン時価総額/i, /链上市值/i, /鏈上市值/i, /\bOn\s*chain\s+Market\s+Cap\b/i, /\bOnchain\s+Market\s+Cap\b/i], 180);
+  const liquidity = firstNumberAfter(text, [/深さ/i, /深度/i, /\bdepth\b/i, /\bPool\s+Depth\b/i], 160);
+  const holders = firstNumberAfter(text, [/保有者/i, /持有者/i, /持有人/i, /\bHolders\b/i], 120);
 
   return { price, marketCap, liquidity, holders };
 }
@@ -116,16 +108,23 @@ export async function GET() {
   const address = tokenConfig.contract.toLowerCase();
   const base = `https://api.arc-scan.org/v1/tokens/${address}`;
 
-  const [tokenResult, infoResult, holdersResult, pageIo, pageOrg] = await Promise.all([
+  const [tokenResult, infoResult, holdersResult, pageJa, pageZh] = await Promise.all([
     getJson(base),
     getJson(`${base}/info`),
     getJson(`${base}/holders?limit=1`),
-    getText(`https://arc-scan.io/token/${address}`),
-    getText(`https://arc-scan.org/token/${address}`),
+    getText(`https://arc-scan.org/ja/token/${address}?t=${Date.now()}`),
+    getText(`https://arc-scan.org/zh/token/${address}?t=${Date.now()}`),
   ]);
 
   const sources = [infoResult.data, tokenResult.data, holdersResult.data];
-  const parsedPage = parseTokenPage(pageIo.text || pageOrg.text);
+  const parsedJa = parseLocalizedArcscan(pageJa.text);
+  const parsedZh = parseLocalizedArcscan(pageZh.text);
+  const parsedPage = {
+    price: parsedJa.price ?? parsedZh.price,
+    marketCap: parsedJa.marketCap ?? parsedZh.marketCap,
+    liquidity: parsedJa.liquidity ?? parsedZh.liquidity,
+    holders: parsedJa.holders ?? parsedZh.holders,
+  };
 
   const apiPrice = findAcross(sources, ["price_usd", "priceUsd", "usd_price", "usdPrice", "price", "spot_price", "spotPrice", "token_price", "tokenPrice"]);
   const apiLiquidity = findAcross(sources, ["liquidity_usd", "liquidityUsd", "total_liquidity_usd", "totalLiquidityUsd", "pool_depth_usd", "poolDepthUsd", "depth_usd", "depthUsd", "pool_depth", "poolDepth", "liquidity"]);
@@ -134,16 +133,17 @@ export async function GET() {
   const decimals = findAcross(sources, ["decimals"]);
   const apiHolders = findAcross([holdersResult.data, infoResult.data, tokenResult.data], ["holder_count", "holders_count", "holderCount", "holdersCount", "total_holders", "totalHolders", "count", "total"]);
 
-  const price = apiPrice ?? parsedPage.price;
-  const liquidity = apiLiquidity ?? parsedPage.liquidity;
-  const holders = apiHolders ?? parsedPage.holders;
+  // Arcscan's rendered token page is authoritative for the live market widget.
+  // API values are only fallbacks because the API can omit or lag market fields.
+  const price = parsedPage.price ?? apiPrice;
+  const liquidity = parsedPage.liquidity ?? apiLiquidity;
+  const holders = parsedPage.holders ?? apiHolders;
 
   let normalizedSupply = supply;
   if (supply !== null && decimals !== null && decimals > 0 && supply > 1e12) normalizedSupply = supply / Math.pow(10, decimals);
   else if (supply !== null && supply > 1e15) normalizedSupply = supply / 1e18;
 
-  const marketCap = apiMarketCap ?? parsedPage.marketCap ?? (price !== null && normalizedSupply !== null ? price * normalizedSupply : null);
-  const pageWorked = parsedPage.price !== null || parsedPage.marketCap !== null || parsedPage.liquidity !== null || parsedPage.holders !== null;
+  const marketCap = parsedPage.marketCap ?? apiMarketCap ?? (price !== null && normalizedSupply !== null ? price * normalizedSupply : null);
 
   return NextResponse.json(
     {
@@ -151,14 +151,14 @@ export async function GET() {
       marketCap,
       liquidity,
       holders,
-      source: pageWorked ? "Arcscan market page" : "Arcscan API",
+      source: parsedPage.price !== null ? "Arcscan live token page" : "Arcscan API fallback",
       updatedAt: new Date().toISOString(),
       available: price !== null || marketCap !== null || liquidity !== null || holders !== null,
       diagnostics: {
-        api: { token: tokenResult.status, info: infoResult.status, holders: holdersResult.status },
-        page: { io: pageIo.status, org: pageOrg.status, parsed: parsedPage },
+        page: { ja: pageJa.status, zh: pageZh.status, parsed: parsedPage },
+        api: { token: tokenResult.status, info: infoResult.status, holders: holdersResult.status, price: apiPrice },
       },
     },
-    { status: 200, headers: { "Cache-Control": "no-store, max-age=0" } },
+    { status: 200, headers: { "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0" } },
   );
 }
