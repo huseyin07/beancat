@@ -61,27 +61,34 @@ function CatPortrait({ dark = false }: { dark?: boolean }) {
 
 function Hero() {
   return (
-    <section id="top" className="hero-shell">
-      <div className="hero-grid absolute inset-0 opacity-50"/>
+    <section id="top" className="hero-shell hero-shell-og">
+      <div className="hero-grid absolute inset-0 opacity-45"/>
       <div className="hero-orbit hero-orbit-one"/><div className="hero-orbit hero-orbit-two"/>
-      <div className="relative mx-auto grid max-w-[1480px] items-center gap-12 lg:min-h-[calc(100vh-7rem)] lg:grid-cols-[1fr_.9fr]">
+      <div className="relative mx-auto grid max-w-[1480px] items-center gap-14 lg:min-h-[calc(100vh-7rem)] lg:grid-cols-[.92fr_1.08fr]">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
-          <div className="eyebrow"><span className="status-dot"/>Public archive / 23 Aug 2015</div>
-          <h1 className="hero-title mt-7">The forgotten @arc profile<br/><span>was named 豆.</span></h1>
-          <p className="mt-7 max-w-2xl text-lg font-semibold leading-8 tracking-[-.025em] md:text-xl">A 2015 Wayback snapshot of the old <strong>@arc</strong> account shows a cat avatar and the display name <strong>豆</strong>. Years later, that forgotten internet artifact became the lore carried by the original-name meme coin on Arc.</p>
-          <p className="mt-4 max-w-xl text-sm leading-7 text-ink/55">This is not a claim that today&apos;s Arc blockchain existed in 2015. It is the archived history of the @arc handle — and the strange piece of internet archaeology that gave 豆 its story.</p>
-          <div className="mt-8 flex flex-wrap gap-3"><ActionLink href={tokenConfig.archiveUrl} className="button button-dark receipt-link">See the 2015 receipt <ArrowUpRight className="link-arrow" size={16}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink></div>
-          <div className="hero-facts mt-10"><div><span>HANDLE</span><strong>@arc</strong></div><div><span>ARCHIVED</span><strong>23 AUG 2015</strong></div><div><span>NETWORK NOW</span><strong>ARC</strong></div></div>
+          <div className="eyebrow"><span className="status-dot"/>OG BeanCat narrative / Arc</div>
+          <h1 className="hero-title hero-title-og mt-7">The OG BeanCat<br/><span>on Arc.</span></h1>
+          <p className="hero-kicker mt-6">Archived in 2015. Revived on-chain.</p>
+          <p className="mt-5 max-w-xl text-base font-semibold leading-7 tracking-[-.02em] text-ink/60 md:text-lg">An old <strong>@arc</strong> profile was captured by Wayback Machine with a cat avatar and the display name <strong>豆</strong>. Today, that forgotten piece of internet history is the lore behind the OG BeanCat narrative on Arc.</p>
+          <div className="hero-proof-tags mt-7"><span>2015 ARCHIVE</span><span>@arc</span><span>豆</span></div>
+          <div className="mt-8 flex flex-wrap gap-3"><ActionLink href={tokenConfig.archiveUrl} className="button button-dark receipt-link">View proof <ArrowUpRight className="link-arrow" size={16}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink>{tokenConfig.xUrl && <ActionLink href={tokenConfig.xUrl} className="button button-ghost hero-social">X</ActionLink>}{tokenConfig.telegramUrl && <ActionLink href={tokenConfig.telegramUrl} className="button button-ghost hero-social">Telegram</ActionLink>}</div>
+          <p className="mt-7 max-w-xl font-mono text-[8px] uppercase leading-5 tracking-[.15em] text-ink/35">The archive predates today&apos;s Arc blockchain project. The historical @arc account was unrelated to the modern network.</p>
         </motion.div>
-        <Reveal className="relative">
-          <div className="hero-proof-card">
-            <div className="archive-browserbar"><div className="flex gap-1.5"><i/><i/><i/></div><span>WEB.ARCHIVE.ORG / RECEIPT</span></div>
-            <ActionLink href={tokenConfig.archiveUrl} className="block bg-[#d8d3c7] p-3 md:p-4"><img src="/archive-proof.png" alt="Archived 2015 @arc profile proof" className="w-full border border-ink/15 bg-white" draggable={false}/></ActionLink>
-            <div className="grid grid-cols-[1fr_auto] items-end gap-6 p-5 md:p-6"><div><span className="font-mono text-[8px] font-bold uppercase tracking-[.2em] text-arc">This is the receipt</span><p className="mt-2 text-xl font-black tracking-[-.03em]">Old @arc profile. Cat avatar. 豆 display name.</p></div><span className="archive-stamp">2015<br/>FOUND</span></div>
+
+        <Reveal className="relative hero-dossier-wrap">
+          <div className="hero-dossier">
+            <div className="hero-dossier-head"><div><span>ARCHIVE DOSSIER</span><strong>CASE / @arc / 2015</strong></div><span className="archive-stamp hero-stamp">ARCHIVED<br/>2015</span></div>
+            <div className="hero-dossier-image">
+              <ActionLink href={tokenConfig.archiveUrl} className="block"><img src="/archive-proof.png" alt="2015 Wayback capture of the old @arc profile" draggable={false}/></ActionLink>
+              <div className="hero-cat-inset"><img src="/mame-cat-original.png" alt="Archived cat avatar" draggable={false}/><span>CAT / SOURCE</span></div>
+            </div>
+            <div className="hero-dossier-ledger"><div><span>HANDLE</span><strong>@arc</strong></div><div><span>DISPLAY NAME</span><strong>豆</strong></div><div><span>PROFILE</span><strong>CAT</strong></div><div><span>RECEIPT</span><strong>PUBLIC</strong></div></div>
+            <ActionLink href={tokenConfig.archiveUrl} className="hero-dossier-source receipt-link"><span>OPEN ORIGINAL WAYBACK CAPTURE</span><ArrowUpRight className="link-arrow" size={15}/></ActionLink>
           </div>
-          <div className="absolute -bottom-5 -left-5 hidden rotate-[-4deg] border border-ink/20 bg-paper px-4 py-3 font-mono text-[8px] font-bold uppercase tracking-[.18em] shadow-[6px_6px_0_rgba(17,19,18,.1)] md:block">Internet archaeology<br/>→ source preserved</div>
+          <div className="hero-file-note">PUBLIC RECEIPT<br/><span>23 AUG 2015 · 02:23:08 UTC</span></div>
         </Reveal>
       </div>
+      <div className="hero-thesis"><span>THE NAME WAS THERE.</span><span>THE CAT WAS THERE.</span><strong>THE RECEIPT IS PUBLIC.</strong></div>
     </section>
   );
 }
