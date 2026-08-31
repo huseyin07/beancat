@@ -28,10 +28,10 @@ body::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-i
   .archive-browserbar { @apply flex items-center justify-between border-b border-ink/15 px-5 py-4 font-mono text-[8px] uppercase tracking-[.18em] text-ink/45; }
   .archive-browserbar i { @apply block size-2 rounded-full border border-ink/30; }
   .archive-stamp { @apply rotate-3 border-2 border-seal px-3 py-2 text-center font-mono text-[8px] font-bold uppercase tracking-[.12em] text-seal; }
-  .cat-card { @apply relative aspect-square overflow-hidden border border-ink/15 bg-[#dcd7ca] text-ink; background-image: url('/mame-cat.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; }
+  .cat-card { @apply relative aspect-square overflow-hidden border border-ink/15 bg-[#dcd7ca] text-ink; background-image: url('/mame-cat-lossless.webp'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat; }
   .cat-card svg { display: none; }
   .cat-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
-  .cat-card-dark { @apply border-paper/15 text-paper; filter: saturate(.82) contrast(1.05); }
+  .cat-card-dark { @apply border-paper/15 text-paper; }
   .cat-card > span { @apply bg-ink/70 px-2 py-1 text-paper; }
   .story-panel { @apply space-y-8 border-l border-ink/20 pl-6 text-[clamp(1.4rem,2.6vw,2.5rem)] font-semibold leading-[1.15] tracking-[-.035em] md:pl-10; }
   .story-panel p:not(.story-hit) { @apply text-ink/55; }
