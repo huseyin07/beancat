@@ -81,27 +81,39 @@ function htmlToText(html: string) {
     .trim();
 }
 
-function firstNumberAfter(text: string, labels: RegExp[], windowSize = 240): number | null {
+function dollarAfter(text: string, labels: RegExp[], windowSize = 220): number | null {
   for (const label of labels) {
     const match = label.exec(text);
     if (!match || match.index === undefined) continue;
     const window = text.slice(match.index + match[0].length, match.index + match[0].length + windowSize);
-    const numberMatch = window.match(/\$?\s*([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?)/);
+    const dollarMatch = window.match(/\$\s*([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?)/);
+    if (dollarMatch) return numberFrom(dollarMatch[1]);
+  }
+  return null;
+}
+
+function plainNumberAfter(text: string, labels: RegExp[], windowSize = 180): number | null {
+  for (const label of labels) {
+    const match = label.exec(text);
+    if (!match || match.index === undefined) continue;
+    const window = text.slice(match.index + match[0].length, match.index + match[0].length + windowSize);
+    const numberMatch = window.match(/([0-9]+(?:,[0-9]{3})*(?:\.[0-9]+)?)/);
     if (numberMatch) return numberFrom(numberMatch[1]);
   }
   return null;
 }
 
 function parseLocalizedArcscan(html: string) {
-  if (!html) return { price: null, marketCap: null, liquidity: null, holders: null };
+  if (!html) return { pagePrice: null, marketCap: null, liquidity: null, holders: null, circulatingSupply: null };
   const text = htmlToText(html);
 
-  const price = firstNumberAfter(text, [/価格/i, /\bPrice\b/i], 160);
-  const marketCap = firstNumberAfter(text, [/オンチェーン時価総額/i, /链上市值/i, /鏈上市值/i, /\bOn\s*chain\s+Market\s+Cap\b/i, /\bOnchain\s+Market\s+Cap\b/i], 180);
-  const liquidity = firstNumberAfter(text, [/深さ/i, /深度/i, /\bdepth\b/i, /\bPool\s+Depth\b/i], 160);
-  const holders = firstNumberAfter(text, [/保有者/i, /持有者/i, /持有人/i, /\bHolders\b/i], 120);
+  const pagePrice = dollarAfter(text, [/価格/i, /\bPrice\b/i], 160);
+  const marketCap = dollarAfter(text, [/オンチェーン時価総額/i, /链上市值/i, /鏈上市值/i, /\bOn\s*chain\s+Market\s+Cap\b/i, /\bOnchain\s+Market\s+Cap\b/i], 180);
+  const liquidity = dollarAfter(text, [/深さ/i, /深度/i, /\bdepth\b/i, /\bPool\s+Depth\b/i], 160);
+  const holders = plainNumberAfter(text, [/保有者/i, /持有者/i, /持有人/i, /\bHolders\b/i], 100);
+  const circulatingSupply = plainNumberAfter(text, [/流通供給量/i, /流通供应量/i, /流通供應量/i, /\bCirculating\s+Supply\b/i], 180);
 
-  return { price, marketCap, liquidity, holders };
+  return { pagePrice, marketCap, liquidity, holders, circulatingSupply };
 }
 
 export async function GET() {
@@ -119,31 +131,41 @@ export async function GET() {
   const sources = [infoResult.data, tokenResult.data, holdersResult.data];
   const parsedJa = parseLocalizedArcscan(pageJa.text);
   const parsedZh = parseLocalizedArcscan(pageZh.text);
-  const parsedPage = {
-    price: parsedJa.price ?? parsedZh.price,
-    marketCap: parsedJa.marketCap ?? parsedZh.marketCap,
-    liquidity: parsedJa.liquidity ?? parsedZh.liquidity,
-    holders: parsedJa.holders ?? parsedZh.holders,
-  };
 
-  const apiPrice = findAcross(sources, ["price_usd", "priceUsd", "usd_price", "usdPrice", "price", "spot_price", "spotPrice", "token_price", "tokenPrice"]);
-  const apiLiquidity = findAcross(sources, ["liquidity_usd", "liquidityUsd", "total_liquidity_usd", "totalLiquidityUsd", "pool_depth_usd", "poolDepthUsd", "depth_usd", "depthUsd", "pool_depth", "poolDepth", "liquidity"]);
-  const apiMarketCap = findAcross(sources, ["market_cap", "marketCap", "market_cap_usd", "marketCapUsd", "onchain_market_cap", "onchainMarketCap", "on_chain_market_cap", "fdv", "fully_diluted_value", "fullyDilutedValue"]);
-  const supply = findAcross(sources, ["circulating_supply", "circulatingSupply", "total_supply", "totalSupply", "supply"]);
+  const marketCap = parsedJa.marketCap ?? parsedZh.marketCap ?? findAcross(sources, [
+    "market_cap", "marketCap", "market_cap_usd", "marketCapUsd", "onchain_market_cap", "onchainMarketCap", "on_chain_market_cap", "fdv", "fully_diluted_value", "fullyDilutedValue",
+  ]);
+
+  const rawSupply = findAcross(sources, ["circulating_supply", "circulatingSupply", "total_supply", "totalSupply", "supply"]);
   const decimals = findAcross(sources, ["decimals"]);
-  const apiHolders = findAcross([holdersResult.data, infoResult.data, tokenResult.data], ["holder_count", "holders_count", "holderCount", "holdersCount", "total_holders", "totalHolders", "count", "total"]);
+  let apiSupply = rawSupply;
+  if (rawSupply !== null && decimals !== null && decimals > 0 && rawSupply > 1e12) apiSupply = rawSupply / Math.pow(10, decimals);
+  else if (rawSupply !== null && rawSupply > 1e15) apiSupply = rawSupply / 1e18;
 
-  // Arcscan's rendered token page is authoritative for the live market widget.
-  // API values are only fallbacks because the API can omit or lag market fields.
-  const price = parsedPage.price ?? apiPrice;
-  const liquidity = parsedPage.liquidity ?? apiLiquidity;
-  const holders = parsedPage.holders ?? apiHolders;
+  const circulatingSupply = parsedJa.circulatingSupply ?? parsedZh.circulatingSupply ?? apiSupply;
 
-  let normalizedSupply = supply;
-  if (supply !== null && decimals !== null && decimals > 0 && supply > 1e12) normalizedSupply = supply / Math.pow(10, decimals);
-  else if (supply !== null && supply > 1e15) normalizedSupply = supply / 1e18;
+  // Derive price from Arcscan's live market cap and circulating supply whenever possible.
+  // This prevents unrelated "$1" values in Arcscan's HTML/API from being mistaken for token price.
+  const derivedPrice = marketCap !== null && circulatingSupply !== null && circulatingSupply > 0
+    ? marketCap / circulatingSupply
+    : null;
 
-  const marketCap = parsedPage.marketCap ?? apiMarketCap ?? (price !== null && normalizedSupply !== null ? price * normalizedSupply : null);
+  const pagePrice = parsedJa.pagePrice ?? parsedZh.pagePrice;
+  const apiPrice = findAcross(sources, ["price_usd", "priceUsd", "usd_price", "usdPrice", "price", "spot_price", "spotPrice", "token_price", "tokenPrice"]);
+
+  let price = derivedPrice ?? pagePrice ?? apiPrice;
+  if (price !== null && marketCap !== null && circulatingSupply !== null && circulatingSupply > 0) {
+    const expected = marketCap / circulatingSupply;
+    if (price > expected * 20 || price < expected / 20) price = expected;
+  }
+
+  const liquidity = parsedJa.liquidity ?? parsedZh.liquidity ?? findAcross(sources, [
+    "liquidity_usd", "liquidityUsd", "total_liquidity_usd", "totalLiquidityUsd", "pool_depth_usd", "poolDepthUsd", "depth_usd", "depthUsd", "pool_depth", "poolDepth", "liquidity",
+  ]);
+
+  const holders = parsedJa.holders ?? parsedZh.holders ?? findAcross([holdersResult.data, infoResult.data, tokenResult.data], [
+    "holder_count", "holders_count", "holderCount", "holdersCount", "total_holders", "totalHolders", "count", "total",
+  ]);
 
   return NextResponse.json(
     {
@@ -151,12 +173,12 @@ export async function GET() {
       marketCap,
       liquidity,
       holders,
-      source: parsedPage.price !== null ? "Arcscan live token page" : "Arcscan API fallback",
+      source: derivedPrice !== null ? "Arcscan live market cap / supply" : pagePrice !== null ? "Arcscan live token page" : "Arcscan API fallback",
       updatedAt: new Date().toISOString(),
       available: price !== null || marketCap !== null || liquidity !== null || holders !== null,
       diagnostics: {
-        page: { ja: pageJa.status, zh: pageZh.status, parsed: parsedPage },
-        api: { token: tokenResult.status, info: infoResult.status, holders: holdersResult.status, price: apiPrice },
+        page: { ja: pageJa.status, zh: pageZh.status, marketCap, circulatingSupply, pagePrice, derivedPrice },
+        api: { token: tokenResult.status, info: infoResult.status, holders: holdersResult.status, apiPrice },
       },
     },
     { status: 200, headers: { "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0" } },
