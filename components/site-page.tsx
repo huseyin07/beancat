@@ -80,7 +80,6 @@ function Hero() {
             <div className="hero-dossier-head"><div><span>ARCHIVE DOSSIER</span><strong>CASE / @arc / 2015</strong></div><span className="archive-stamp hero-stamp">ARCHIVED<br/>2015</span></div>
             <div className="hero-dossier-image">
               <ActionLink href={tokenConfig.archiveUrl} className="block"><img src="/archive-proof.png" alt="2015 Wayback capture of the old @arc profile" draggable={false}/></ActionLink>
-              <div className="hero-cat-inset"><img src="/mame-cat-original.png" alt="Archived cat avatar" draggable={false}/><span>CAT / SOURCE</span></div>
             </div>
             <div className="hero-dossier-ledger"><div><span>HANDLE</span><strong>@arc</strong></div><div><span>DISPLAY NAME</span><strong>豆</strong></div><div><span>PROFILE</span><strong>CAT</strong></div><div><span>RECEIPT</span><strong>PUBLIC</strong></div></div>
             <ActionLink href={tokenConfig.archiveUrl} className="hero-dossier-source receipt-link"><span>OPEN ORIGINAL WAYBACK CAPTURE</span><ArrowUpRight className="link-arrow" size={15}/></ActionLink>
