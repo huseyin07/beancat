@@ -14,33 +14,6 @@ type MarketData = {
 
 const emptyMarket: MarketData = { price: null, marketCap: null, liquidity: null, holders: null };
 
-function numberFrom(value: unknown): number | null {
-  if (typeof value === "number" && Number.isFinite(value)) return value;
-  if (typeof value === "string") {
-    const parsed = Number(value.replace(/[$,]/g, ""));
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-  return null;
-}
-
-function deepFind(obj: unknown, keys: string[]): number | null {
-  if (!obj || typeof obj !== "object") return null;
-  const record = obj as Record<string, unknown>;
-  for (const key of keys) {
-    if (key in record) {
-      const found = numberFrom(record[key]);
-      if (found !== null) return found;
-    }
-  }
-  for (const value of Object.values(record)) {
-    if (value && typeof value === "object") {
-      const found = deepFind(value, keys);
-      if (found !== null) return found;
-    }
-  }
-  return null;
-}
-
 function money(value: number | null, price = false) {
   if (value === null) return "—";
   if (price) {
@@ -61,30 +34,20 @@ export function MarketStrip() {
   async function load() {
     setLoading(true);
     try {
-      const tokenUrl = `https://api.arc-scan.org/v1/tokens/${tokenConfig.contract}`;
-      const holdersUrl = `https://api.arc-scan.org/v1/tokens/${tokenConfig.contract}/holders?limit=1`;
-      const [tokenResponse, holdersResponse] = await Promise.allSettled([
-        fetch(tokenUrl, { cache: "no-store" }),
-        fetch(holdersUrl, { cache: "no-store" }),
-      ]);
-
-      let tokenJson: unknown = null;
-      let holdersJson: unknown = null;
-      if (tokenResponse.status === "fulfilled" && tokenResponse.value.ok) tokenJson = await tokenResponse.value.json();
-      if (holdersResponse.status === "fulfilled" && holdersResponse.value.ok) holdersJson = await holdersResponse.value.json();
-
-      const price = deepFind(tokenJson, ["price_usd", "priceUsd", "usd_price", "price", "spot_price"]);
-      const liquidity = deepFind(tokenJson, ["liquidity_usd", "liquidityUsd", "pool_depth_usd", "depth_usd", "depth", "liquidity"]);
-      const supply = deepFind(tokenJson, ["total_supply", "totalSupply", "supply"]);
-      const directMarketCap = deepFind(tokenJson, ["market_cap", "marketCap", "market_cap_usd", "marketCapUsd"]);
-      const marketCap = directMarketCap ?? (price !== null && supply !== null ? price * (supply > 1e15 ? supply / 1e18 : supply) : null);
-      const holders = deepFind(holdersJson, ["holder_count", "holders_count", "holderCount", "holders", "total"])
-        ?? deepFind(tokenJson, ["holder_count", "holders_count", "holderCount", "holders"]);
-
-      setData({ price, marketCap, liquidity, holders });
-      setUpdatedAt(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+      const response = await fetch(`/api/market?t=${Date.now()}`, { cache: "no-store" });
+      if (!response.ok) throw new Error("Market proxy unavailable");
+      const json = await response.json();
+      setData({
+        price: typeof json.price === "number" ? json.price : null,
+        marketCap: typeof json.marketCap === "number" ? json.marketCap : null,
+        liquidity: typeof json.liquidity === "number" ? json.liquidity : null,
+        holders: typeof json.holders === "number" ? json.holders : null,
+      });
+      const sourceTime = json.updatedAt ? new Date(json.updatedAt) : new Date();
+      setUpdatedAt(sourceTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
     } catch {
       setData(emptyMarket);
+      setUpdatedAt("");
     } finally {
       setLoading(false);
     }
@@ -106,7 +69,7 @@ export function MarketStrip() {
   return (
     <section className="market-strip" aria-label="Live market data">
       <div className="market-strip-inner">
-        <div className="market-live-label"><i/><span>ARC MARKET</span><small>{loading ? "SYNCING" : updatedAt ? `UPDATED ${updatedAt}` : "LIVE"}</small></div>
+        <div className="market-live-label"><i/><span>ARC MARKET</span><small>{loading ? "SYNCING" : updatedAt ? `UPDATED ${updatedAt}` : "DATA UNAVAILABLE"}</small></div>
         <div className="market-cells">{cells.map(([label, value]) => <div key={label}><span>{label}</span><strong>{value}</strong></div>)}</div>
         <div className="market-actions"><button onClick={load} aria-label="Refresh market data"><RefreshCw size={13} className={loading ? "animate-spin" : ""}/></button><a href={tokenConfig.buyUrl} target="_blank" rel="noopener noreferrer">LIVE MARKET <ArrowUpRight size={13}/></a></div>
       </div>
