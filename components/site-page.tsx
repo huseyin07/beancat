@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
-import { ArrowDown, ArrowRight, ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
 import { Reveal } from "./reveal";
@@ -9,7 +9,6 @@ import { Reveal } from "./reveal";
 const nav = [
   ["Story", "#story"],
   ["Proof", "#proof"],
-  ["Why 豆", "#why"],
   ["Timeline", "#timeline"],
   ["Token", "#token"],
 ];
@@ -137,22 +136,6 @@ function Proof() {
   );
 }
 
-function WhyMame() {
-  const cards = [
-    ["THE NAME", "豆", "The archived @arc account visibly used 豆 as its display name."],
-    ["THE CAT", "ARCHIVED", "The cat avatar comes from the same public snapshot, giving the lore a real visual subject."],
-    ["THE RECEIPT", "PUBLIC", "The Wayback capture is still accessible. Anyone can inspect the source instead of trusting a made-up story."],
-  ];
-  return (
-    <section id="why" className="section-shell">
-      <SectionLabel number="03 / WHY">Why 豆?</SectionLabel>
-      <Reveal><div className="why-intro"><p className="font-mono text-[9px] font-bold uppercase tracking-[.22em] text-arc">Most meme coins invent a story.</p><h2 className="heading-lg mt-4">豆 found one buried in the internet.</h2></div></Reveal>
-      <div className="mt-12 grid gap-5 lg:grid-cols-3">{cards.map(([eyebrow,big,text],i)=><Reveal key={eyebrow} delay={i*.05} className="why-card"><span>{eyebrow}</span><strong>{big}</strong><p>{text}</p><div className="why-card-index">0{i+1}</div></Reveal>)}</div>
-      <Reveal className="why-statement mt-8"><div><span>ARCHIVE → LORE → ON-CHAIN</span><p>This is the whole thesis.</p></div><ArrowRight size={28}/><strong>豆 WAS HERE FIRST.</strong></Reveal>
-    </section>
-  );
-}
-
 const timeline = [
   ["2012", "@arc account existed", "The handle existed years before the current Arc blockchain identity."],
   ["2015", "Wayback captures 豆", "The archived profile shows the cat avatar and the display name 豆."],
@@ -167,7 +150,7 @@ function Timeline() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
   return (
     <section id="timeline" className="section-shell bg-[#ece8de]">
-      <SectionLabel number="04 / TIMELINE">Artifact trail</SectionLabel>
+      <SectionLabel number="03 / TIMELINE">Artifact trail</SectionLabel>
       <div className="grid gap-14 lg:grid-cols-[.72fr_1fr] lg:gap-20">
         <Reveal><div className="lg:sticky lg:top-32"><p className="font-mono text-[9px] font-bold uppercase tracking-[.2em] text-ink/40">Follow the handle ↓</p><h2 className="heading-lg mt-5 uppercase">History leaves a trail.</h2><p className="mt-6 max-w-md text-sm leading-7 text-ink/55">The story is stronger when the order is obvious. Handle first. Archive second. Modern Arc later. Meme coin after that.</p></div></Reveal>
         <div ref={timelineRef} className="relative border-l border-ink/15 pl-8 md:pl-14"><motion.div className="absolute -left-px top-0 h-full w-[3px] origin-top bg-arc" style={{ scaleY }}/>{timeline.map(([date,title,text], index) => <Reveal className="timeline-card" delay={index*.04} key={date}><span className="timeline-dot"/><div className="timeline-date">{date}</div><h3>{title}</h3><p>{text}</p>{index < timeline.length - 1 && <ArrowDown className="mt-6 text-ink/20" size={17}/>}</Reveal>)}</div>
@@ -185,7 +168,7 @@ function Token() {
   const reducedMotion = useReducedMotion();
   async function copyContract() { if (!tokenConfig.contract) return; await navigator.clipboard.writeText(tokenConfig.contract); setCopied(true); window.setTimeout(() => setCopied(false), reducedMotion ? 500 : 1800); }
   const visibleContract = tokenConfig.contract ? `${tokenConfig.contract.slice(0,8)}...${tokenConfig.contract.slice(-6)}` : "COMING SOON";
-  return <section id="token" className="section-shell"><SectionLabel number="05 / TOKEN">On-chain record</SectionLabel><Reveal className="onchain-panel"><div className="onchain-head"><span>ARC / TOKEN RECORD</span><span className="flex items-center gap-2"><i className="status-dot"/>LIVE</span></div><div className="grid lg:grid-cols-[.7fr_1.3fr]"><div className="token-symbol-panel"><span className="font-mono text-[8px] font-bold uppercase tracking-[.2em] text-ink/35">Original-name meme</span><p className="font-display text-[10rem] font-black leading-none">{tokenConfig.name}</p><p className="mt-6 text-3xl font-black uppercase tracking-[-.04em]">Archive lore.<br/>On-chain record.</p></div><div className="p-7 lg:p-10">{[["Network", tokenConfig.network.toUpperCase()], ["Contract", visibleContract], ["Status", "COMMUNITY REVIVAL"]].map(([key,value]) => <div className="token-row" key={key}><span>{key}</span><strong>{value}</strong></div>)}<div className="mt-8 flex flex-wrap gap-3"><button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:opacity-40">{copied ? <Check size={15}/> : <Copy size={15}/>} {copied ? "Copied" : "Copy CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink></div></div></div></Reveal></section>;
+  return <section id="token" className="section-shell"><SectionLabel number="04 / TOKEN">On-chain record</SectionLabel><Reveal className="onchain-panel"><div className="onchain-head"><span>ARC / TOKEN RECORD</span><span className="flex items-center gap-2"><i className="status-dot"/>LIVE</span></div><div className="grid lg:grid-cols-[.7fr_1.3fr]"><div className="token-symbol-panel"><span className="font-mono text-[8px] font-bold uppercase tracking-[.2em] text-ink/35">Original-name meme</span><p className="font-display text-[10rem] font-black leading-none">{tokenConfig.name}</p><p className="mt-6 text-3xl font-black uppercase tracking-[-.04em]">Archive lore.<br/>On-chain record.</p></div><div className="p-7 lg:p-10">{[["Network", tokenConfig.network.toUpperCase()], ["Contract", visibleContract], ["Status", "COMMUNITY REVIVAL"]].map(([key,value]) => <div className="token-row" key={key}><span>{key}</span><strong>{value}</strong></div>)}<div className="mt-8 flex flex-wrap gap-3"><button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:opacity-40">{copied ? <Check size={15}/> : <Copy size={15}/>} {copied ? "Copied" : "Copy CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink></div></div></div></Reveal></section>;
 }
 
 function Footer() {
@@ -193,4 +176,4 @@ function Footer() {
   return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]"><div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-5 max-w-md text-sm leading-7 text-paper/45">An archived name. A cat. A public receipt. A community bringing the lore back on Arc.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#8eabff]">{label} ↗</ActionLink>)}</nav></div><div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div></div></footer>;
 }
 
-export function SitePage() { return <><Header/><main><Hero/><ProofStrip/><Story/><Proof/><WhyMame/><Timeline/><MemeMoment/><Token/></main><Footer/></>; }
+export function SitePage() { return <><Header/><main><Hero/><ProofStrip/><Story/><Proof/><Timeline/><MemeMoment/><Token/></main><Footer/></>; }
