@@ -1,264 +1,176 @@
 "use client";
 
-import {
-  AnimatePresence,
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-} from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { ArrowDown, ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
-import { useEffect, useRef, useState, type MouseEvent, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
 import { Reveal } from "./reveal";
 
 const nav = [
   ["Origin", "#origin"],
-  ["Receipts", "#receipts"],
+  ["Archive", "#archive"],
+  ["On-chain", "#token"],
   ["Timeline", "#timeline"],
-  ["Token", "#token"],
 ];
 
-type ActionLinkProps = {
-  href: string;
-  children: ReactNode;
-  className?: string;
-  disabledLabel?: string;
-};
+type ActionLinkProps = { href: string; children: ReactNode; className?: string; disabledLabel?: string };
 
 function ActionLink({ href, children, className = "", disabledLabel }: ActionLinkProps) {
-  if (!href) {
-    return (
-      <span className={`${className} cursor-not-allowed opacity-40`} aria-disabled="true" title="Link coming soon">
-        {disabledLabel ?? children}
-      </span>
-    );
-  }
-
-  return (
-    <a href={href} className={className} target="_blank" rel="noopener noreferrer">
-      {children}
-    </a>
-  );
+  if (!href) return <span className={`${className} cursor-not-allowed opacity-40`} aria-disabled="true">{disabledLabel ?? children}</span>;
+  return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{children}</a>;
 }
 
 function Header() {
   const [open, setOpen] = useState(false);
-
   useEffect(() => {
     const close = () => setOpen(false);
     window.addEventListener("resize", close);
     return () => window.removeEventListener("resize", close);
   }, []);
-
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/10 bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-5 md:px-10">
-        <a href="#top" className="group flex items-center gap-3" aria-label="Mame home">
+        <a href="#top" className="group flex items-center gap-3" aria-label="Home">
           <span className="font-display text-4xl font-black leading-none transition-transform group-hover:-rotate-3">{tokenConfig.name}</span>
-          <span className="font-mono text-[10px] tracking-[.28em] text-ink/55">MAME</span>
+          <span className="font-mono text-[10px] tracking-[.28em] text-ink/55">OG ARC LORE</span>
         </a>
         <nav className="hidden items-center gap-8 md:flex" aria-label="Primary navigation">
           {nav.map(([label, href]) => <a className="nav-link" href={href} key={href}>{label}</a>)}
         </nav>
         <div className="hidden items-center gap-2 md:flex">
           {tokenConfig.xUrl && <ActionLink href={tokenConfig.xUrl} className="button button-ghost">X</ActionLink>}
-          <ActionLink href={tokenConfig.buyUrl} className="button button-dark">Buy {tokenConfig.ticker} <ArrowUpRight size={15} /></ActionLink>
+          <ActionLink href={tokenConfig.buyUrl} className="button button-dark">Buy <ArrowUpRight size={15} /></ActionLink>
         </div>
-        <button className="grid size-11 place-items-center border border-ink/20 md:hidden" onClick={() => setOpen(value => !value)} aria-expanded={open} aria-controls="mobile-navigation" aria-label="Toggle menu">
+        <button className="grid size-11 place-items-center border border-ink/20 md:hidden" onClick={() => setOpen(v => !v)} aria-label="Toggle menu" aria-expanded={open}>
           {open ? <X /> : <Menu />}
         </button>
       </div>
       <AnimatePresence>
-        {open && (
-          <motion.nav id="mobile-navigation" initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden border-t border-ink/10 bg-paper md:hidden">
-            <div className="flex flex-col p-5">
-              {nav.map(([label, href]) => <a className="border-b border-ink/10 py-4 font-mono text-xs uppercase tracking-[.18em]" href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}
-              <ActionLink href={tokenConfig.buyUrl} className="button button-dark mt-5 justify-center">Buy {tokenConfig.ticker} <ArrowUpRight size={15} /></ActionLink>
-            </div>
-          </motion.nav>
-        )}
+        {open && <motion.nav initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden border-t border-ink/10 bg-paper md:hidden">
+          <div className="flex flex-col p-5">
+            {nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} className="border-b border-ink/10 py-4 font-mono text-xs uppercase tracking-[.18em]">{label}</a>)}
+            <ActionLink href={tokenConfig.buyUrl} className="button button-dark mt-5 justify-center">Buy <ArrowUpRight size={15} /></ActionLink>
+          </div>
+        </motion.nav>}
       </AnimatePresence>
     </header>
   );
 }
 
 function SectionLabel({ children, number }: { children: ReactNode; number: string }) {
+  return <div className="mb-10 flex items-center justify-between border-b border-ink/20 pb-4 font-mono text-[10px] font-bold uppercase tracking-[.22em]"><span>{children}</span><span className="text-ink/40">{number} / 006</span></div>;
+}
+
+function CatPortrait({ dark = false }: { dark?: boolean }) {
   return (
-    <div className="mb-10 flex items-center justify-between border-b border-ink/20 pb-4 font-mono text-[10px] font-bold uppercase tracking-[.22em]">
-      <span>{children}</span><span className="text-ink/40">{number} / 007</span>
+    <div className={`cat-card ${dark ? "cat-card-dark" : ""}`} aria-label="Stylized archival cat portrait">
+      <svg viewBox="0 0 420 420" role="img" aria-hidden="true" className="h-full w-full">
+        <rect width="420" height="420" fill="currentColor" opacity="0.035" />
+        <path d="M118 150 82 71l88 46c25-12 54-18 84-18s59 6 84 18l88-46-36 79c27 31 42 72 42 116 0 96-78 174-174 174S84 362 84 266c0-44 15-85 34-116Z" fill="none" stroke="currentColor" strokeWidth="9" strokeLinejoin="round"/>
+        <path d="M150 251c18-13 38-13 56 0M268 251c18-13 38-13 56 0" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round"/>
+        <path d="M203 283c18 16 34 16 52 0M229 278v20" fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round"/>
+        <path d="M116 287 48 274m73 39-67 13m250-39 68-13m-73 39 67 13" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" opacity=".5"/>
+      </svg>
+      <span className="absolute bottom-4 left-4 font-mono text-[8px] uppercase tracking-[.22em] opacity-45">CAT / ARCHIVE SUBJECT</span>
     </div>
   );
 }
 
-function HeroMark() {
-  const reducedMotion = useReducedMotion();
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const x = useSpring(mouseX, { stiffness: 90, damping: 22 });
-  const y = useSpring(mouseY, { stiffness: 90, damping: 22 });
-
-  function move(event: MouseEvent<HTMLDivElement>) {
-    if (reducedMotion || window.innerWidth < 1024) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    mouseX.set(((event.clientX - bounds.left) / bounds.width - 0.5) * 8);
-    mouseY.set(((event.clientY - bounds.top) / bounds.height - 0.5) * 8);
-  }
-
+function ArchiveProfile() {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.94 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.9, delay: 0.1 }}
-      className="hero-mark-wrap"
-      onMouseMove={move}
-      onMouseLeave={() => { mouseX.set(0); mouseY.set(0); }}
-    >
-      <motion.div style={{ x, y }} className="hero-mark" aria-label={tokenConfig.name}>{tokenConfig.name}</motion.div>
-      <span className="seal absolute bottom-[10%] right-[7%]">原<br />名</span>
-      <span className="absolute left-0 top-3 font-mono text-[8px] uppercase tracking-[.2em] text-ink/40">Index / 001</span>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8, delay: .12 }} className="archive-profile">
+      <div className="archive-browserbar"><div className="flex gap-1.5"><i/><i/><i/></div><span>WEB.ARCHIVE.ORG / 2015 SNAPSHOT</span></div>
+      <div className="p-5 md:p-7">
+        <div className="mb-5 flex items-center justify-between font-mono text-[8px] uppercase tracking-[.2em] text-ink/45"><span>Archived profile</span><span>23 AUG 2015</span></div>
+        <CatPortrait />
+        <div className="mt-6 flex items-end justify-between gap-5">
+          <div><p className="font-mono text-[10px] text-ink/45">@arc</p><p className="mt-1 font-display text-5xl font-black">{tokenConfig.name}</p></div>
+          <span className="archive-stamp">RECEIPT<br/>FOUND</span>
+        </div>
+        <p className="mt-5 border-t border-ink/15 pt-4 font-mono text-[8px] uppercase tracking-[.18em] text-ink/45">Joined May 2012 · archived before current Arc brand ownership</p>
+      </div>
     </motion.div>
   );
 }
 
 function Hero() {
   return (
-    <>
-      <section id="top" className="relative min-h-screen overflow-hidden border-b border-ink/15 px-5 pb-14 pt-28 md:px-10 md:pb-20 md:pt-32">
-        <div className="hero-grid absolute inset-0 opacity-50" />
-        <div className="relative mx-auto grid max-w-[1440px] items-center gap-8 lg:min-h-[calc(100vh-13rem)] lg:grid-cols-[.82fr_1.18fr]">
-          <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }} className="z-10 lg:py-10">
-            <p className="eyebrow"><span className="status-dot" />Archived internet lore / Arc</p>
-            <h1 className="mt-7 text-[clamp(3.65rem,7vw,7.8rem)] font-black uppercase leading-[.84] tracking-[-.07em]">{tokenConfig.name}<br />was here first.</h1>
-            <div className="mt-8 max-w-xl border-l border-ink/25 pl-5">
-              <p className="text-xl font-semibold leading-snug tracking-[-.025em] md:text-2xl">The original name behind the old @arc account.</p>
-              <p className="mt-4 text-sm leading-7 text-ink/60 md:text-base">The first Arc meme coin to preserve that name exactly as it appeared.</p>
-            </div>
-            <div className="mt-8 grid max-w-lg grid-cols-2 border border-ink/20 font-mono text-[9px] uppercase tracking-[.15em]">
-              <span className="p-4"><i className="mb-2 block not-italic text-ink/35">Original</i><strong className="font-display text-2xl text-ink">{tokenConfig.name}</strong></span>
-              <span className="border-l border-ink/20 p-4 text-ink/50"><i className="mb-2 block not-italic text-ink/35">Translated later</i>BEANCAT</span>
-            </div>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ActionLink href={tokenConfig.archiveUrl} className="button button-dark receipt-link">View 2015 receipt <ArrowUpRight className="link-arrow" size={16} /></ActionLink>
-              <ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy {tokenConfig.ticker}</ActionLink>
-            </div>
-            <p className="mt-7 font-mono text-[9px] uppercase tracking-[.2em] text-ink/40">Snapshot: Aug 23 2015</p>
-          </motion.div>
-          <HeroMark />
-        </div>
-      </section>
-      <ProofStrip />
-    </>
+    <section id="top" className="relative min-h-screen overflow-hidden border-b border-ink/15 px-5 pb-16 pt-28 md:px-10 md:pt-32">
+      <div className="hero-grid absolute inset-0 opacity-45" />
+      <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 lg:min-h-[calc(100vh-11rem)] lg:grid-cols-[.9fr_1.1fr]">
+        <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
+          <p className="eyebrow"><span className="status-dot"/>Arc internet lore / archive 2015</p>
+          <h1 className="mt-7 text-[clamp(3.4rem,7vw,7.3rem)] font-black uppercase leading-[.86] tracking-[-.07em]">The cat that was already there.</h1>
+          <p className="mt-7 max-w-xl text-lg font-semibold leading-8 tracking-[-.025em] md:text-xl">Before the current Arc identity took over @arc, the archived account carried a cat and the name {tokenConfig.name}.</p>
+          <p className="mt-4 max-w-lg text-sm leading-7 text-ink/55">Years later, that exact name appeared on-chain as an earlier Arc meme coin. The story is the receipt.</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <ActionLink href={tokenConfig.archiveUrl} className="button button-dark receipt-link">View the archive <ArrowUpRight className="link-arrow" size={16}/></ActionLink>
+            <ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy</ActionLink>
+          </div>
+          <div className="mt-8 flex gap-8 border-t border-ink/15 pt-5 font-mono text-[8px] uppercase tracking-[.18em] text-ink/45"><span>Snapshot / Aug 23 2015</span><span>Network / Arc</span></div>
+        </motion.div>
+        <ArchiveProfile />
+      </div>
+    </section>
   );
 }
 
 function ProofStrip() {
-  const items = [
-    ["Archive", "@arc"], ["Name", tokenConfig.name], ["Archive", "Aug 2015"], ["Chain", `Original name preserved on ${tokenConfig.network}`],
-  ];
-  return (
-    <div className="bg-ink text-paper">
-      <div className="mx-auto grid max-w-[1520px] sm:grid-cols-2 lg:grid-cols-[.65fr_.5fr_.75fr_2fr]">
-        {items.map(([label, value], index) => (
-          <div className="proof-item" key={`${label}-${value}`}>
-            <span>{label}</span><strong className={value === tokenConfig.name ? "font-display text-2xl" : ""}>{value}</strong>{index < items.length - 1 && <ArrowUpRight className="hidden text-paper/25 lg:block" size={14} />}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  const items = [["HANDLE", "@arc"], ["ARCHIVE", "23 AUG 2015"], ["SUBJECT", "CAT PROFILE"], ["STATUS", "SOURCE MATERIAL PRESERVED"]];
+  return <div className="bg-ink text-paper"><div className="mx-auto grid max-w-[1520px] sm:grid-cols-2 lg:grid-cols-4">{items.map(([label,value]) => <div className="proof-item" key={label}><span>{label}</span><strong>{value}</strong></div>)}</div></div>;
 }
 
 function Origin() {
   return (
     <section id="origin" className="section-shell">
-      <SectionLabel number="001">The origin</SectionLabel>
-      <div className="grid gap-16 lg:grid-cols-[.85fr_1.15fr] lg:gap-24">
+      <SectionLabel number="001">Origin</SectionLabel>
+      <div className="grid gap-14 lg:grid-cols-[.72fr_1.28fr] lg:gap-24">
+        <Reveal><div className="lg:sticky lg:top-32"><p className="font-mono text-[9px] uppercase tracking-[.2em] text-seal">An old account. A cat. One character.</p><h2 className="heading-lg mt-5">The handle existed before the brand.</h2></div></Reveal>
         <Reveal>
-          <p className="font-mono text-[9px] uppercase tracking-[.2em] text-seal">Owner history matters.</p>
-          <h2 className="heading-lg mt-5">The handle existed before the brand.</h2>
-        </Reveal>
-        <div>
-          <Reveal>
-            <div className="max-w-2xl space-y-5 text-base leading-8 text-ink/65 md:text-lg">
-              <p>Before the current Arc brand used the @arc handle, the handle appeared in an archived profile named <strong className="text-ink">{tokenConfig.name}</strong>.</p>
-              <p>The August 23, 2015 snapshot shows a cat profile picture. It does not show the current Arc blockchain project.</p>
-              <p className="font-semibold text-ink">The receipt exists.</p>
-            </div>
-          </Reveal>
-          <Reveal className="archive-window mt-14" delay={0.1}>
-            <div className="flex items-center justify-between border-b border-ink/15 px-5 py-4"><div className="flex gap-1.5"><i /><i /><i /></div><span className="font-mono text-[8px] tracking-[.16em] text-ink/45">WEB.ARCHIVE.ORG / SNAPSHOT</span></div>
-            <div className="grid gap-8 p-6 md:grid-cols-[120px_1fr] md:p-9">
-              <div className="grid aspect-square place-items-center bg-ink font-display text-6xl font-black text-paper">{tokenConfig.name}</div>
-              <div><p className="font-mono text-[9px] font-bold tracking-[.2em] text-arc">WAYBACK MACHINE · AUGUST 23, 2015</p><p className="mt-5 text-sm text-ink/45">@arc</p><p className="font-display text-5xl font-black">{tokenConfig.name}</p><p className="mt-4 font-mono text-[9px] tracking-[.16em] text-ink/50">JOINED MAY 2012</p></div>
-            </div>
-            <ActionLink href={tokenConfig.archiveUrl} className="receipt-link flex items-center justify-between border-t border-ink/15 px-6 py-5 font-mono text-[9px] font-bold uppercase tracking-[.17em] transition-colors hover:bg-ink hover:text-paper">View original archive <ArrowUpRight className="link-arrow" size={15} /></ActionLink>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Receipts() {
-  return (
-    <section id="receipts" className="section-shell border-t border-ink/15">
-      <SectionLabel number="002">The receipts</SectionLabel>
-      <Reveal><h2 className="heading-lg max-w-5xl uppercase">Don&apos;t trust the lore.<br /><span className="text-arc">Verify it.</span></h2></Reveal>
-      <div className="mt-16 grid gap-4 lg:grid-cols-3">
-        <Reveal className="evidence-card group" delay={0.05}>
-          <span className="evidence-number">001 / The archive</span>
-          <div><p className="text-5xl font-black tracking-[-.05em]">@arc</p><p className="font-display text-[8rem] font-black leading-none">{tokenConfig.name}</p><p className="font-mono text-[10px] tracking-[.18em] text-ink/45">AUG 23 2015</p></div>
-          <p className="max-w-sm text-sm leading-7 text-ink/60">The archived @arc profile used the display name {tokenConfig.name}.</p>
-          <ActionLink href={tokenConfig.archiveUrl} className="receipt-link flex items-center justify-between border-t border-ink/20 pt-5 font-mono text-[9px] font-bold uppercase tracking-[.15em]">Open Wayback Machine <ArrowUpRight className="link-arrow" size={14} /></ActionLink>
-        </Reveal>
-        <Reveal className="evidence-card group bg-ink text-paper" delay={0.1}>
-          <span className="evidence-number text-paper/45">002 / The name</span>
-          <div className="relative"><p className="font-display text-[clamp(10rem,22vw,18rem)] font-black leading-[.7]">{tokenConfig.name}</p><span className="seal mt-10 border-[#d46150] text-[#d46150]">源<br />名</span></div>
-          <p className="max-w-sm text-sm leading-7 text-paper/60">No English rewrite. No new mascot name. The original name was preserved exactly.</p>
-          <span className="border-t border-paper/20 pt-5 font-mono text-[9px] font-bold uppercase tracking-[.18em]">Source name</span>
-        </Reveal>
-        <Reveal className="evidence-card group" delay={0.15}>
-          <span className="evidence-number">003 / The chain</span>
-          <div><p className="text-[clamp(4.5rem,9vw,8rem)] font-black leading-none tracking-[-.07em]">FIRST</p><p className="mt-5 font-display text-6xl font-black text-arc">{tokenConfig.name}</p></div>
-          <p className="max-w-sm text-sm leading-7 text-ink/60">The earlier Arc meme coin carrying the original {tokenConfig.name} identity.</p>
-          <span className="border-t border-ink/20 pt-5 font-mono text-[9px] uppercase tracking-[.18em] text-ink/45">Before BEANCAT</span>
+          <div className="story-panel">
+            <p>The @arc username existed long before today&apos;s Arc blockchain brand.</p>
+            <p>An archived snapshot from August 23, 2015 shows a cat profile picture and the display name <strong>{tokenConfig.name}</strong>.</p>
+            <p>The internet moved on.</p>
+            <p className="story-hit">The lore didn&apos;t.</p>
+          </div>
         </Reveal>
       </div>
     </section>
   );
 }
 
-function Comparison() {
-  const columns = [
-    { title: tokenConfig.name, badge: "Source", items: ["Original archived name", "Japanese name preserved", "Earlier coin"], source: true },
-    { title: "BEANCAT", badge: "Translation", items: ["English interpretation", "Readable translation of the cat / bean lore", "Later coin"], source: false },
-  ];
+function ArchiveEvidence() {
   return (
-    <section className="section-shell bg-[#e9e6dc]">
-      <SectionLabel number="003">Source vs translation</SectionLabel>
-      <div className="grid border-l border-t border-ink/20 md:grid-cols-2">
-        {columns.map((column, index) => (
-          <Reveal className={`comparison-card ${column.source ? "bg-paper" : ""}`} delay={index * 0.08} key={column.title}>
-            <span className={`badge ${column.source ? "bg-seal text-paper" : "border border-ink/25 text-ink/45"}`}>{column.badge}</span>
-            <h2 className={column.source ? "font-display text-[clamp(9rem,24vw,18rem)] font-black leading-[.75]" : "text-[clamp(3rem,7vw,6rem)] font-black tracking-[-.06em] text-ink/55"}>{column.title}</h2>
-            <ul className="mt-12 border-t border-ink/15">{column.items.map(item => <li className="border-b border-ink/15 py-4 text-sm text-ink/60" key={item}>{item}</li>)}</ul>
-          </Reveal>
-        ))}
+    <section id="archive" className="section-shell bg-[#e9e6dc]">
+      <SectionLabel number="002">Archive record</SectionLabel>
+      <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
+        <Reveal className="archive-window">
+          <div className="archive-browserbar"><div className="flex gap-1.5"><i/><i/><i/></div><span>CAPTURE / WEB ARCHIVE</span></div>
+          <div className="grid gap-8 p-6 md:grid-cols-[220px_1fr] md:p-9">
+            <CatPortrait />
+            <div className="flex flex-col justify-between gap-8">
+              <div><p className="font-mono text-[9px] font-bold uppercase tracking-[.2em] text-arc">Verified archive</p><h2 className="mt-5 text-5xl font-black tracking-[-.05em] md:text-7xl">@arc</h2><p className="mt-3 font-mono text-xs text-ink/45">PROFILE NAME / {tokenConfig.name}</p></div>
+              <ActionLink href={tokenConfig.archiveUrl} className="receipt-link flex items-center justify-between border-t border-ink/20 pt-5 font-mono text-[9px] font-bold uppercase tracking-[.16em]">Open Wayback Machine <ArrowUpRight className="link-arrow" size={15}/></ActionLink>
+            </div>
+          </div>
+        </Reveal>
+        <Reveal className="evidence-notes" delay={.08}>
+          <div><span>01 / HANDLE</span><strong>@arc</strong></div>
+          <div><span>02 / PROFILE</span><strong>Cat avatar</strong></div>
+          <div><span>03 / DATE</span><strong>23 Aug 2015</strong></div>
+          <div><span>04 / CONTEXT</span><strong>Previous account, not the current Arc project</strong></div>
+        </Reveal>
       </div>
-      <Reveal><p className="mt-16 max-w-6xl text-[clamp(2.8rem,6.5vw,6.7rem)] font-black uppercase leading-[.9] tracking-[-.065em]">The translation got the attention.<br /><span className="text-arc">The source was still here.</span></p></Reveal>
     </section>
   );
 }
 
 const timeline = [
   ["2012", "@arc account existed"],
-  ["2015", `Archived as ${tokenConfig.name}`],
-  ["Arc", "The handle later becomes associated with the Arc blockchain brand"],
-  [tokenConfig.name, `The original-name meme coin appears on ${tokenConfig.network}`],
-  ["BEANCAT", "The lore receives an English meme identity"],
-  ["Now", "The source gets its voice back"],
+  ["2015", "Archived profile with cat avatar and the original display name"],
+  ["ARC ERA", "The handle later becomes associated with the current Arc blockchain brand"],
+  ["ON-CHAIN", "The original-name meme coin appears on Arc"],
+  ["NOW", "The forgotten lore gets a community voice"],
 ];
 
 function Timeline() {
@@ -267,34 +179,29 @@ function Timeline() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 80, damping: 20 });
   return (
     <section id="timeline" className="section-shell">
-      <SectionLabel number="004">Artifact index</SectionLabel>
+      <SectionLabel number="003">Artifact trail</SectionLabel>
       <div className="grid gap-14 lg:grid-cols-[.7fr_1fr]">
         <Reveal><div className="lg:sticky lg:top-32"><p className="font-mono text-[9px] uppercase tracking-[.2em] text-ink/40">Follow the handle ↓</p><h2 className="heading-lg mt-5 uppercase">History leaves a trail.</h2></div></Reveal>
         <div ref={timelineRef} className="relative border-l border-ink/15 pl-8 md:pl-14">
-          <motion.div className="absolute -left-px top-0 h-full w-[2px] origin-top bg-arc" style={{ scaleY }} />
-          {timeline.map(([date, text], index) => (
-            <Reveal className="relative min-h-40 border-b border-ink/15 py-8 first:pt-0" delay={index * 0.04} key={date}>
-              <span className="absolute -left-[2.25rem] top-9 size-2 rounded-full bg-arc ring-4 ring-paper md:-left-[3.75rem]" />
-              <p className={`font-black uppercase tracking-[-.05em] ${date === tokenConfig.name ? "font-display text-6xl text-arc" : "text-4xl"}`}>{date}</p>
-              <p className="mt-4 max-w-md text-sm leading-7 text-ink/60">{text}</p>
-              {index < timeline.length - 1 && <ArrowDown className="mt-5 text-ink/20" size={16} />}
-            </Reveal>
-          ))}
+          <motion.div className="absolute -left-px top-0 h-full w-[2px] origin-top bg-arc" style={{ scaleY }}/>
+          {timeline.map(([date,text], index) => <Reveal className="relative min-h-40 border-b border-ink/15 py-8 first:pt-0" delay={index*.04} key={date}>
+            <span className="absolute -left-[2.25rem] top-9 size-2 rounded-full bg-arc ring-4 ring-paper md:-left-[3.75rem]"/>
+            <p className="text-4xl font-black uppercase tracking-[-.05em]">{date}</p>
+            <p className="mt-4 max-w-md text-sm leading-7 text-ink/60">{text}</p>
+            {index < timeline.length - 1 && <ArrowDown className="mt-5 text-ink/20" size={16}/>} 
+          </Reveal>)}
         </div>
       </div>
-      <p className="mt-20 border-t border-ink/20 pt-7 text-right text-[clamp(2.6rem,6vw,6rem)] font-black uppercase leading-none tracking-[-.06em]">Return to the original.</p>
     </section>
   );
 }
 
-function MameMoment() {
+function MemeMoment() {
   return (
-    <section className="mame-moment">
-      <Reveal className="relative mx-auto max-w-[1440px]">
-        <p className="font-mono text-[9px] uppercase tracking-[.3em] text-paper/45">{tokenConfig.name} / Mame</p>
-        <p className="mt-16 text-[clamp(3.6rem,10vw,10.5rem)] font-black uppercase leading-[.82] tracking-[-.075em]">Before it was<br />a meme,<br /><span className="text-[#7da0ff]">it was Mame.</span></p>
-        <p className="mt-16 font-mono text-[9px] tracking-[.18em] text-paper/45">豆 can be read as “mame” in Japanese.</p>
-        <span className="absolute right-0 top-0 hidden font-display text-[15rem] font-black leading-none text-paper/[.025] md:block">豆</span>
+    <section className="meme-moment">
+      <Reveal className="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[1fr_.7fr] lg:items-center">
+        <div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-paper/45">Internet memory / on-chain memory</p><p className="mt-8 text-[clamp(4rem,9vw,9rem)] font-black uppercase leading-[.82] tracking-[-.075em]">The internet forgot.<br/><span className="text-[#7da0ff]">The chain didn&apos;t.</span></p></div>
+        <CatPortrait dark />
       </Reveal>
     </section>
   );
@@ -302,28 +209,24 @@ function MameMoment() {
 
 function Token() {
   const [copied, setCopied] = useState(false);
+  const reducedMotion = useReducedMotion();
   async function copyContract() {
     if (!tokenConfig.contract) return;
     await navigator.clipboard.writeText(tokenConfig.contract);
     setCopied(true);
-    window.setTimeout(() => setCopied(false), 1800);
+    window.setTimeout(() => setCopied(false), reducedMotion ? 500 : 1800);
   }
-
-  const visibleContract = tokenConfig.contract
-    ? `${tokenConfig.contract.slice(0, 6)}...${tokenConfig.contract.slice(-4)}`
-    : "COMING_SOON";
-  const details = [["Name", tokenConfig.name], ["Ticker", tokenConfig.ticker], ["Network", tokenConfig.network.toUpperCase()], ["Contract", visibleContract]];
+  const visibleContract = tokenConfig.contract ? `${tokenConfig.contract.slice(0,6)}...${tokenConfig.contract.slice(-4)}` : "COMING SOON";
   return (
     <section id="token" className="section-shell bg-paper">
-      <SectionLabel number="005">The token</SectionLabel>
-      <div className="grid gap-14 lg:grid-cols-[.55fr_1fr]">
-        <div><p className="font-display text-[10rem] font-black leading-[.7]">{tokenConfig.name}</p><h2 className="mt-12 text-4xl font-black uppercase tracking-[-.05em]">Name intact.</h2></div>
-        <div className="border-t border-ink">
-          {details.map(([key, value]) => <div className="grid grid-cols-[95px_1fr] border-b border-ink/20 py-6 md:grid-cols-[180px_1fr]" key={key}><span className="font-mono text-[9px] uppercase tracking-[.2em] text-ink/45">{key}</span><strong className={key === "Name" ? "font-display text-4xl" : "break-all font-mono text-sm"}>{value}</strong></div>)}
-          <div className="mt-7 flex flex-wrap gap-3">
-            <button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:cursor-not-allowed disabled:opacity-40">{copied ? <Check size={15} /> : <Copy size={15} />}{copied ? "Copied" : "Copy contract"}</button>
-            <ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy {tokenConfig.ticker}</ActionLink>
-            <ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14} /></ActionLink>
+      <SectionLabel number="004">On-chain record</SectionLabel>
+      <div className="onchain-panel">
+        <div className="onchain-head"><span>ARC / TOKEN RECORD</span><span className="flex items-center gap-2"><i className="status-dot"/>LIVE</span></div>
+        <div className="grid lg:grid-cols-[.65fr_1.35fr]">
+          <div className="border-b border-ink/15 p-7 lg:border-b-0 lg:border-r lg:p-10"><p className="font-display text-[8rem] font-black leading-none">{tokenConfig.name}</p><p className="mt-8 text-3xl font-black uppercase tracking-[-.04em]">Name intact.<br/>Record live.</p></div>
+          <div className="p-7 lg:p-10">
+            {[["Network", tokenConfig.network.toUpperCase()], ["Contract", visibleContract], ["Status", "LIVE"]].map(([key,value]) => <div className="grid grid-cols-[90px_1fr] border-b border-ink/15 py-5 md:grid-cols-[150px_1fr]" key={key}><span className="font-mono text-[8px] uppercase tracking-[.2em] text-ink/40">{key}</span><strong className="break-all font-mono text-sm">{value}</strong></div>)}
+            <div className="mt-7 flex flex-wrap gap-3"><button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:opacity-40">{copied ? <Check size={15}/> : <Copy size={15}/>} {copied ? "Copied" : "Copy CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy</ActionLink></div>
           </div>
         </div>
       </div>
@@ -332,29 +235,13 @@ function Token() {
 }
 
 function Footer() {
-  const communityUrl = tokenConfig.telegramUrl || tokenConfig.xUrl;
-  const footerLinks = [["X", tokenConfig.xUrl], ["Explorer", tokenConfig.explorerUrl], ["Archive", tokenConfig.archiveUrl], ["Buy", tokenConfig.buyUrl]].filter(([, href]) => Boolean(href));
-  return (
-    <>
-      <section className="bg-arc px-5 py-24 text-paper md:px-10 md:py-36">
-        <Reveal className="mx-auto max-w-[1440px]"><p className="font-mono text-[9px] uppercase tracking-[.25em] text-paper/65">Source material preserved</p><h2 className="mt-7 max-w-5xl text-[clamp(3.3rem,8vw,8rem)] font-black uppercase leading-[.86] tracking-[-.065em]">The original gets its voice back.</h2><div className="mt-12 flex flex-col justify-between gap-8 md:flex-row md:items-end"><p className="text-lg leading-8 text-paper/75">You found the translation.<br />Now find the source.</p><div className="flex flex-wrap gap-3"><ActionLink href={communityUrl} className="button bg-paper text-ink hover:bg-ink hover:text-paper">Join {tokenConfig.name} <ArrowUpRight size={15} /></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button border border-paper/50 hover:bg-paper hover:text-ink">Buy {tokenConfig.ticker}</ActionLink></div></div></Reveal>
-      </section>
-      <footer className="bg-ink px-5 py-14 text-paper md:px-10">
-        <div className="mx-auto max-w-[1440px]">
-          <div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-6 max-w-md text-sm leading-7 text-paper/45">The original name. The archived handle. The receipt.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]" aria-label="Footer">{footerLinks.map(([label, href]) => <ActionLink href={href} key={label} className="hover:text-[#759cff]">{label} ↗</ActionLink>)}</nav></div>
-          <div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div>
-        </div>
-      </footer>
-    </>
-  );
+  const footerLinks = [["X", tokenConfig.xUrl], ["Explorer", tokenConfig.explorerUrl], ["Archive", tokenConfig.archiveUrl], ["Buy", tokenConfig.buyUrl]].filter(([,href]) => Boolean(href));
+  return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]">
+    <div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-6 max-w-md text-sm leading-7 text-paper/45">Archived lore. On-chain history. Community preserved.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#759cff]">{label} ↗</ActionLink>)}</nav></div>
+    <div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div>
+  </div></footer>;
 }
 
 export function SitePage() {
-  return (
-    <>
-      <Header />
-      <main><Hero /><Origin /><Receipts /><Comparison /><Timeline /><MameMoment /><Token /><Footer /></main>
-      <aside className="fixed bottom-8 right-4 z-40 hidden font-mono text-[8px] uppercase tracking-[.25em] text-ink/35 [writing-mode:vertical-rl] xl:block">Archive / Arc / {tokenConfig.name}</aside>
-    </>
-  );
+  return <><Header/><main><Hero/><ProofStrip/><Origin/><ArchiveEvidence/><Timeline/><MemeMoment/><Token/></main><Footer/></>;
 }
