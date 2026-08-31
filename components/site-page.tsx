@@ -40,12 +40,13 @@ function Header() {
         </nav>
         <div className="hidden items-center gap-2 md:flex">
           {tokenConfig.xUrl && <ActionLink href={tokenConfig.xUrl} className="button button-ghost">X</ActionLink>}
+          {tokenConfig.telegramUrl && <ActionLink href={tokenConfig.telegramUrl} className="button button-ghost">Telegram</ActionLink>}
           <ActionLink href={tokenConfig.buyUrl} className="button button-dark">Buy <ArrowUpRight size={15} /></ActionLink>
         </div>
         <button className="grid size-11 place-items-center border border-ink/20 md:hidden" onClick={() => setOpen(v => !v)} aria-label="Toggle menu" aria-expanded={open}>{open ? <X /> : <Menu />}</button>
       </div>
       <AnimatePresence>
-        {open && <motion.nav initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden border-t border-ink/10 bg-paper md:hidden"><div className="flex flex-col p-5">{nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} className="border-b border-ink/10 py-4 font-mono text-xs uppercase tracking-[.18em]">{label}</a>)}<ActionLink href={tokenConfig.buyUrl} className="button button-dark mt-5 justify-center">Buy <ArrowUpRight size={15} /></ActionLink></div></motion.nav>}
+        {open && <motion.nav initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="overflow-hidden border-t border-ink/10 bg-paper md:hidden"><div className="flex flex-col p-5">{nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)} className="border-b border-ink/10 py-4 font-mono text-xs uppercase tracking-[.18em]">{label}</a>)}{tokenConfig.telegramUrl && <ActionLink href={tokenConfig.telegramUrl} className="button button-outline mt-5 justify-center">Telegram</ActionLink>}<ActionLink href={tokenConfig.buyUrl} className="button button-dark mt-3 justify-center">Buy <ArrowUpRight size={15} /></ActionLink></div></motion.nav>}
       </AnimatePresence>
     </header>
   );
@@ -188,7 +189,7 @@ function Token() {
 }
 
 function Footer() {
-  const footerLinks = [["X", tokenConfig.xUrl], ["Explorer", tokenConfig.explorerUrl], ["Archive", tokenConfig.archiveUrl], ["Buy", tokenConfig.buyUrl]].filter(([,href]) => Boolean(href));
+  const footerLinks = [["X", tokenConfig.xUrl], ["Telegram", tokenConfig.telegramUrl], ["Explorer", tokenConfig.explorerUrl], ["Archive", tokenConfig.archiveUrl], ["Buy", tokenConfig.buyUrl]].filter(([,href]) => Boolean(href));
   return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]"><div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-5 max-w-md text-sm leading-7 text-paper/45">An archived name. A cat. A public receipt. A community bringing the lore back on Arc.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#8eabff]">{label} ↗</ActionLink>)}</nav></div><div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div></div></footer>;
 }
 
