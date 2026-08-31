@@ -5,6 +5,7 @@ import { ArrowDown, ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
 import { Reveal } from "./reveal";
+import { ArchiveNow, CommunityRevival, ContractBar, MarketStrip, ShareCTA } from "./growth-sections";
 
 const nav = [
   ["Story", "#story"],
@@ -182,4 +183,6 @@ function Footer() {
   return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]"><div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-5 max-w-md text-sm leading-7 text-paper/45">An archived name. A cat. A public receipt. A community bringing the lore back on Arc.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#8eabff]">{label} ↗</ActionLink>)}</nav></div><div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div></div></footer>;
 }
 
-export function SitePage() { return <><Header/><main><Hero/><ProofStrip/><Story/><Proof/><Timeline/><MemeMoment/><Token/></main><Footer/></>; }
+export function SitePage() {
+  return <><Header/><main><Hero/><MarketStrip/><ContractBar/><ProofStrip/><Story/><ArchiveNow/><Proof/><CommunityRevival/><Timeline/><MemeMoment/><Token/><ShareCTA/></main><Footer/></>;
+}
