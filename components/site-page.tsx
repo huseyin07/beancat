@@ -64,12 +64,7 @@ function SectionLabel({ children, number }: { children: ReactNode; number: strin
 function CatPortrait({ dark = false }: { dark?: boolean }) {
   return (
     <div className={`cat-card ${dark ? "cat-card-dark" : ""}`} aria-label="Archived cat portrait">
-      <img
-        src="/mame-cat-original.png"
-        alt="Archived cat profile"
-        className="cat-image"
-        draggable={false}
-      />
+      <img src="/mame-cat-original.png" alt="Archived cat profile" className="cat-image" draggable={false} />
       <span className="absolute bottom-4 left-4 font-mono text-[8px] uppercase tracking-[.22em] opacity-45">CAT / ARCHIVE SUBJECT</span>
     </div>
   );
@@ -125,14 +120,7 @@ function Origin() {
       <SectionLabel number="001">Origin</SectionLabel>
       <div className="grid gap-14 lg:grid-cols-[.72fr_1.28fr] lg:gap-24">
         <Reveal><div className="lg:sticky lg:top-32"><p className="font-mono text-[9px] uppercase tracking-[.2em] text-seal">An old account. A cat. One character.</p><h2 className="heading-lg mt-5">The handle existed before the brand.</h2></div></Reveal>
-        <Reveal>
-          <div className="story-panel">
-            <p>The @arc username existed long before today&apos;s Arc blockchain brand.</p>
-            <p>An archived snapshot from August 23, 2015 shows a cat profile picture and the display name <strong>{tokenConfig.name}</strong>.</p>
-            <p>The internet moved on.</p>
-            <p className="story-hit">The lore didn&apos;t.</p>
-          </div>
-        </Reveal>
+        <Reveal><div className="story-panel"><p>The @arc username existed long before today&apos;s Arc blockchain brand.</p><p>An archived snapshot from August 23, 2015 shows a cat profile picture and the display name <strong>{tokenConfig.name}</strong>.</p><p>The internet moved on.</p><p className="story-hit">The lore didn&apos;t.</p></div></Reveal>
       </div>
     </section>
   );
@@ -160,17 +148,25 @@ function ArchiveEvidence() {
           <div><span>04 / CONTEXT</span><strong>Previous account, not the current Arc project</strong></div>
         </Reveal>
       </div>
+
+      <Reveal className="mt-12 overflow-hidden border border-ink/25 bg-paper shadow-[12px_12px_0_rgba(17,19,18,.08)]" delay={.12}>
+        <div className="flex flex-col gap-3 border-b border-ink/15 px-5 py-4 font-mono text-[8px] font-bold uppercase tracking-[.18em] text-ink/45 sm:flex-row sm:items-center sm:justify-between">
+          <span>ARCHIVED SNAPSHOT / @arc</span>
+          <span>23 AUG 2015 · 02:23:08 UTC</span>
+        </div>
+        <ActionLink href={tokenConfig.archiveUrl} className="group block bg-[#d9d5cb] p-3 md:p-5">
+          <img src="/archive-proof.png" alt="Wayback Machine archived snapshot of the old @arc profile" className="block h-auto w-full border border-ink/15 bg-white object-contain transition-transform duration-500 group-hover:scale-[1.005]" draggable={false} />
+        </ActionLink>
+        <div className="flex flex-col gap-4 border-t border-ink/15 p-5 sm:flex-row sm:items-center sm:justify-between">
+          <div><p className="font-mono text-[8px] font-bold uppercase tracking-[.2em] text-arc">Source proof</p><p className="mt-2 text-sm font-semibold">The original Wayback capture, preserved as visual evidence.</p></div>
+          <ActionLink href={tokenConfig.archiveUrl} className="button button-dark shrink-0">Open original <ArrowUpRight size={15}/></ActionLink>
+        </div>
+      </Reveal>
     </section>
   );
 }
 
-const timeline = [
-  ["2012", "@arc account existed"],
-  ["2015", "Archived profile with cat avatar and the original display name"],
-  ["ARC ERA", "The handle later becomes associated with the current Arc blockchain brand"],
-  ["ON-CHAIN", "The original-name meme coin appears on Arc"],
-  ["NOW", "The forgotten lore gets a community voice"],
-];
+const timeline = [["2012", "@arc account existed"],["2015", "Archived profile with cat avatar and the original display name"],["ARC ERA", "The handle later becomes associated with the current Arc blockchain brand"],["ON-CHAIN", "The original-name meme coin appears on Arc"],["NOW", "The forgotten lore gets a community voice"]];
 
 function Timeline() {
   const timelineRef = useRef<HTMLDivElement>(null);
@@ -183,12 +179,7 @@ function Timeline() {
         <Reveal><div className="lg:sticky lg:top-32"><p className="font-mono text-[9px] uppercase tracking-[.2em] text-ink/40">Follow the handle ↓</p><h2 className="heading-lg mt-5 uppercase">History leaves a trail.</h2></div></Reveal>
         <div ref={timelineRef} className="relative border-l border-ink/15 pl-8 md:pl-14">
           <motion.div className="absolute -left-px top-0 h-full w-[2px] origin-top bg-arc" style={{ scaleY }}/>
-          {timeline.map(([date,text], index) => <Reveal className="relative min-h-40 border-b border-ink/15 py-8 first:pt-0" delay={index*.04} key={date}>
-            <span className="absolute -left-[2.25rem] top-9 size-2 rounded-full bg-arc ring-4 ring-paper md:-left-[3.75rem]"/>
-            <p className="text-4xl font-black uppercase tracking-[-.05em]">{date}</p>
-            <p className="mt-4 max-w-md text-sm leading-7 text-ink/60">{text}</p>
-            {index < timeline.length - 1 && <ArrowDown className="mt-5 text-ink/20" size={16}/>} 
-          </Reveal>)}
+          {timeline.map(([date,text], index) => <Reveal className="relative min-h-40 border-b border-ink/15 py-8 first:pt-0" delay={index*.04} key={date}><span className="absolute -left-[2.25rem] top-9 size-2 rounded-full bg-arc ring-4 ring-paper md:-left-[3.75rem]"/><p className="text-4xl font-black uppercase tracking-[-.05em]">{date}</p><p className="mt-4 max-w-md text-sm leading-7 text-ink/60">{text}</p>{index < timeline.length - 1 && <ArrowDown className="mt-5 text-ink/20" size={16}/>}</Reveal>)}
         </div>
       </div>
     </section>
@@ -196,51 +187,20 @@ function Timeline() {
 }
 
 function MemeMoment() {
-  return (
-    <section className="meme-moment">
-      <Reveal className="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[1fr_.7fr] lg:items-center">
-        <div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-paper/45">Internet memory / on-chain memory</p><p className="mt-8 text-[clamp(4rem,9vw,9rem)] font-black uppercase leading-[.82] tracking-[-.075em]">The internet forgot.<br/><span className="text-[#7da0ff]">The chain didn&apos;t.</span></p></div>
-        <CatPortrait dark />
-      </Reveal>
-    </section>
-  );
+  return <section className="meme-moment"><Reveal className="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[1fr_.7fr] lg:items-center"><div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-paper/45">Internet memory / on-chain memory</p><p className="mt-8 text-[clamp(4rem,9vw,9rem)] font-black uppercase leading-[.82] tracking-[-.075em]">The internet forgot.<br/><span className="text-[#7da0ff]">The chain didn&apos;t.</span></p></div><CatPortrait dark /></Reveal></section>;
 }
 
 function Token() {
   const [copied, setCopied] = useState(false);
   const reducedMotion = useReducedMotion();
-  async function copyContract() {
-    if (!tokenConfig.contract) return;
-    await navigator.clipboard.writeText(tokenConfig.contract);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), reducedMotion ? 500 : 1800);
-  }
+  async function copyContract() { if (!tokenConfig.contract) return; await navigator.clipboard.writeText(tokenConfig.contract); setCopied(true); window.setTimeout(() => setCopied(false), reducedMotion ? 500 : 1800); }
   const visibleContract = tokenConfig.contract ? `${tokenConfig.contract.slice(0,6)}...${tokenConfig.contract.slice(-4)}` : "COMING SOON";
-  return (
-    <section id="token" className="section-shell bg-paper">
-      <SectionLabel number="004">On-chain record</SectionLabel>
-      <div className="onchain-panel">
-        <div className="onchain-head"><span>ARC / TOKEN RECORD</span><span className="flex items-center gap-2"><i className="status-dot"/>LIVE</span></div>
-        <div className="grid lg:grid-cols-[.65fr_1.35fr]">
-          <div className="border-b border-ink/15 p-7 lg:border-b-0 lg:border-r lg:p-10"><p className="font-display text-[8rem] font-black leading-none">{tokenConfig.name}</p><p className="mt-8 text-3xl font-black uppercase tracking-[-.04em]">Name intact.<br/>Record live.</p></div>
-          <div className="p-7 lg:p-10">
-            {[["Network", tokenConfig.network.toUpperCase()], ["Contract", visibleContract], ["Status", "LIVE"]].map(([key,value]) => <div className="grid grid-cols-[90px_1fr] border-b border-ink/15 py-5 md:grid-cols-[150px_1fr]" key={key}><span className="font-mono text-[8px] uppercase tracking-[.2em] text-ink/40">{key}</span><strong className="break-all font-mono text-sm">{value}</strong></div>)}
-            <div className="mt-7 flex flex-wrap gap-3"><button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:opacity-40">{copied ? <Check size={15}/> : <Copy size={15}/>} {copied ? "Copied" : "Copy CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy</ActionLink></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+  return <section id="token" className="section-shell bg-paper"><SectionLabel number="004">On-chain record</SectionLabel><div className="onchain-panel"><div className="onchain-head"><span>ARC / TOKEN RECORD</span><span className="flex items-center gap-2"><i className="status-dot"/>LIVE</span></div><div className="grid lg:grid-cols-[.65fr_1.35fr]"><div className="border-b border-ink/15 p-7 lg:border-b-0 lg:border-r lg:p-10"><p className="font-display text-[8rem] font-black leading-none">{tokenConfig.name}</p><p className="mt-8 text-3xl font-black uppercase tracking-[-.04em]">Name intact.<br/>Record live.</p></div><div className="p-7 lg:p-10">{[["Network", tokenConfig.network.toUpperCase()], ["Contract", visibleContract], ["Status", "LIVE"]].map(([key,value]) => <div className="grid grid-cols-[90px_1fr] border-b border-ink/15 py-5 md:grid-cols-[150px_1fr]" key={key}><span className="font-mono text-[8px] uppercase tracking-[.2em] text-ink/40">{key}</span><strong className="break-all font-mono text-sm">{value}</strong></div>)}<div className="mt-7 flex flex-wrap gap-3"><button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:opacity-40">{copied ? <Check size={15}/> : <Copy size={15}/>} {copied ? "Copied" : "Copy CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy</ActionLink></div></div></div></div></section>;
 }
 
 function Footer() {
   const footerLinks = [["X", tokenConfig.xUrl], ["Explorer", tokenConfig.explorerUrl], ["Archive", tokenConfig.archiveUrl], ["Buy", tokenConfig.buyUrl]].filter(([,href]) => Boolean(href));
-  return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]">
-    <div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-6 max-w-md text-sm leading-7 text-paper/45">Archived lore. On-chain history. Community preserved.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#759cff]">{label} ↗</ActionLink>)}</nav></div>
-    <div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div>
-  </div></footer>;
+  return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]"><div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-6 max-w-md text-sm leading-7 text-paper/45">Archived lore. On-chain history. Community preserved.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#759cff]">{label} ↗</ActionLink>)}</nav></div><div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div></div></footer>;
 }
 
-export function SitePage() {
-  return <><Header/><main><Hero/><ProofStrip/><Origin/><ArchiveEvidence/><Timeline/><MemeMoment/><Token/></main><Footer/></>;
-}
+export function SitePage() { return <><Header/><main><Hero/><ProofStrip/><Origin/><ArchiveEvidence/><Timeline/><MemeMoment/><Token/></main><Footer/></>; }
