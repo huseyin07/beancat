@@ -18,6 +18,6 @@ export const tokenConfig: TokenConfig = {
   buyUrl: "https://radardex.pro/#0x802d3166ad677d3aa993c85910598885568099bf",
   explorerUrl: "https://arc-scan.org/address/0x802d3166ad677d3aa993c85910598885568099bf",
   xUrl: "https://x.com/beancatog?s=11",
-  telegramUrl: "",
+  telegramUrl: "https://t.me/beancatOG",
   archiveUrl: "https://web.archive.org/web/20150823022308/https://twitter.com/arc",
 };
