@@ -4,6 +4,7 @@ import { ScrollProgress } from "@/components/scroll-progress";
 import "./globals.css";
 import "./growth.css";
 import "./polish.css";
+import "./cute.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
