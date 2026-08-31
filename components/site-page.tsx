@@ -63,14 +63,13 @@ function SectionLabel({ children, number }: { children: ReactNode; number: strin
 
 function CatPortrait({ dark = false }: { dark?: boolean }) {
   return (
-    <div className={`cat-card ${dark ? "cat-card-dark" : ""}`} aria-label="Stylized archival cat portrait">
-      <svg viewBox="0 0 420 420" role="img" aria-hidden="true" className="h-full w-full">
-        <rect width="420" height="420" fill="currentColor" opacity="0.035" />
-        <path d="M118 150 82 71l88 46c25-12 54-18 84-18s59 6 84 18l88-46-36 79c27 31 42 72 42 116 0 96-78 174-174 174S84 362 84 266c0-44 15-85 34-116Z" fill="none" stroke="currentColor" strokeWidth="9" strokeLinejoin="round"/>
-        <path d="M150 251c18-13 38-13 56 0M268 251c18-13 38-13 56 0" fill="none" stroke="currentColor" strokeWidth="9" strokeLinecap="round"/>
-        <path d="M203 283c18 16 34 16 52 0M229 278v20" fill="none" stroke="currentColor" strokeWidth="8" strokeLinecap="round"/>
-        <path d="M116 287 48 274m73 39-67 13m250-39 68-13m-73 39 67 13" fill="none" stroke="currentColor" strokeWidth="6" strokeLinecap="round" opacity=".5"/>
-      </svg>
+    <div className={`cat-card ${dark ? "cat-card-dark" : ""}`} aria-label="Archived cat portrait">
+      <img
+        src="/mame-cat-original.png"
+        alt="Archived cat profile"
+        className="cat-image"
+        draggable={false}
+      />
       <span className="absolute bottom-4 left-4 font-mono text-[8px] uppercase tracking-[.22em] opacity-45">CAT / ARCHIVE SUBJECT</span>
     </div>
   );
