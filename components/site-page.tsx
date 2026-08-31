@@ -67,7 +67,7 @@ function Hero() {
       <div className="relative mx-auto grid max-w-[1480px] items-center gap-12 lg:min-h-[calc(100vh-7rem)] lg:grid-cols-[1fr_.9fr]">
         <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }}>
           <div className="eyebrow"><span className="status-dot"/>Public archive / 23 Aug 2015</div>
-          <h1 className="hero-title mt-7">Before Arc was Arc,<br/><span>@arc was 豆.</span></h1>
+          <h1 className="hero-title mt-7">The forgotten @arc profile<br/><span>was named 豆.</span></h1>
           <p className="mt-7 max-w-2xl text-lg font-semibold leading-8 tracking-[-.025em] md:text-xl">A 2015 Wayback snapshot of the old <strong>@arc</strong> account shows a cat avatar and the display name <strong>豆</strong>. Years later, that forgotten internet artifact became the lore carried by the original-name meme coin on Arc.</p>
           <p className="mt-4 max-w-xl text-sm leading-7 text-ink/55">This is not a claim that today&apos;s Arc blockchain existed in 2015. It is the archived history of the @arc handle — and the strange piece of internet archaeology that gave 豆 its story.</p>
           <div className="mt-8 flex flex-wrap gap-3"><ActionLink href={tokenConfig.archiveUrl} className="button button-dark receipt-link">See the 2015 receipt <ArrowUpRight className="link-arrow" size={16}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink></div>
