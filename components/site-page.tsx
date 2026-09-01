@@ -31,6 +31,10 @@ function Header() {
   </header>;
 }
 
+function MemeImage({ src, align = "center" }: { src: string; align?: "left" | "center" | "right" }) {
+  return <section className={`bc-meme-slot bc-meme-${align}`}><motion.div className="bc-meme-frame" initial={{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.45}}><img src={src} alt="BeanCat community meme" draggable={false}/></motion.div></section>;
+}
+
 function Hero() {
   return <section id="top" className="bc-hero live-hero">
     <div className="bc-grid-bg"/>
@@ -79,4 +83,4 @@ function Community() {
 
 function Footer(){return <footer className="bc-footer"><div><a href="#top" className="bc-footer-brand">豆 / BEANCAT</a><p>Archived in 2015. Revived on Arc.</p></div><nav><ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink><ActionLink href={tokenConfig.archiveUrl}>Archive ↗</ActionLink><ActionLink href={tokenConfig.explorerUrl}>Explorer ↗</ActionLink></nav><p className="bc-disclaimer">豆 is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account. Nothing on this website constitutes financial advice.</p></footer>}
 
-export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Proof/><Token/><Community/></main><Footer/></>}
+export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><MemeImage src="/public:meme-1.png" align="left"/><Proof/><MemeImage src="/public:meme-2.png" align="right"/><Token/><MemeImage src="/public:meme-3.png" align="center"/><Community/></main><Footer/></>}
