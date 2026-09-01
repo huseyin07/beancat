@@ -1,53 +1,115 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
-import { Reveal } from "./reveal";
-import { ArchiveNow, CommunityRevival, ContractBar, MarketStrip, ShareCTA } from "./growth-sections";
+import { MarketStrip, ContractBar } from "./growth-sections";
 
-const nav = [["Story", "#story"], ["Proof", "#proof"], ["Timeline", "#timeline"], ["Token", "#token"]];
-type ActionLinkProps = { href: string; children: ReactNode; className?: string; disabledLabel?: string };
+const nav = [["LORE", "#lore"], ["RECEIPT", "#receipt"], ["TOKEN", "#token"]];
 
-function ActionLink({ href, children, className = "", disabledLabel }: ActionLinkProps) {
-  if (!href) return <span className={`${className} cursor-not-allowed opacity-40`} aria-disabled="true">{disabledLabel ?? children}</span>;
+type ActionLinkProps = { href: string; children: ReactNode; className?: string };
+function ActionLink({ href, children, className = "" }: ActionLinkProps) {
+  if (!href) return <span className={`${className} opacity-40`} aria-disabled="true">{children}</span>;
   return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{children}</a>;
 }
 
 function Header() {
   const [open, setOpen] = useState(false);
-  useEffect(() => { const close = () => setOpen(false); window.addEventListener("resize", close); return () => window.removeEventListener("resize", close); }, []);
-  return <header className="site-header"><div className="site-header-inner"><a href="#top" className="site-brand" aria-label="Home"><span>{tokenConfig.name}</span><small>OG BEANCAT / ARC</small></a><nav className="site-nav" aria-label="Primary navigation">{nav.map(([label, href]) => <a href={href} key={href}>{label}</a>)}</nav><div className="site-header-actions">{tokenConfig.xUrl && <ActionLink href={tokenConfig.xUrl} className="site-social-link">X</ActionLink>}{tokenConfig.telegramUrl && <ActionLink href={tokenConfig.telegramUrl} className="site-social-link">TG</ActionLink>}<ActionLink href={tokenConfig.buyUrl} className="site-buy">BUY <ArrowUpRight size={14}/></ActionLink></div><button className="site-menu-button" onClick={() => setOpen(v => !v)} aria-label="Toggle menu" aria-expanded={open}>{open ? <X size={19}/> : <Menu size={19}/>}</button></div><AnimatePresence>{open && <motion.nav initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}} className="site-mobile-nav"><div>{nav.map(([label,href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}<div className="site-mobile-actions">{tokenConfig.xUrl && <ActionLink href={tokenConfig.xUrl}>X</ActionLink>}{tokenConfig.telegramUrl && <ActionLink href={tokenConfig.telegramUrl}>Telegram</ActionLink>}<ActionLink href={tokenConfig.buyUrl} className="site-buy">BUY <ArrowUpRight size={14}/></ActionLink></div></div></motion.nav>}</AnimatePresence></header>;
+  return <header className="meme-header">
+    <div className="meme-header-inner">
+      <a className="meme-brand" href="#top"><span className="meme-brand-kanji">豆</span><span>BEANCAT</span></a>
+      <nav className="meme-nav">{nav.map(([label, href]) => <a href={href} key={href}>{label}</a>)}</nav>
+      <div className="meme-header-cta">
+        <ActionLink href={tokenConfig.xUrl} className="meme-mini-link">X</ActionLink>
+        <ActionLink href={tokenConfig.telegramUrl} className="meme-mini-link">TG</ActionLink>
+        <ActionLink href={tokenConfig.buyUrl} className="meme-buy">BUY 豆 <ArrowUpRight size={15}/></ActionLink>
+      </div>
+      <button className="meme-menu" aria-label="Toggle menu" onClick={() => setOpen(v => !v)}>{open ? <X/> : <Menu/>}</button>
+    </div>
+    <AnimatePresence>{open && <motion.div className="meme-mobile" initial={{height:0, opacity:0}} animate={{height:"auto", opacity:1}} exit={{height:0, opacity:0}}>{nav.map(([label, href]) => <a href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.buyUrl}>BUY 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
+  </header>;
 }
-
-function SectionLabel({ children, number }: { children: ReactNode; number: string }) { return <div className="mb-10 flex items-center justify-between border-b border-ink/20 pb-4 font-mono text-[9px] font-bold uppercase tracking-[.22em]"><span>{children}</span><span className="text-ink/35">{number}</span></div>; }
-function CatPortrait({ dark = false }: { dark?: boolean }) { return <div className={`cat-card ${dark ? "cat-card-dark" : ""}`}><img src="/mame-cat-original.png" alt="Archived cat profile" className="cat-image" draggable={false}/><span className="absolute bottom-4 left-4 font-mono text-[8px] uppercase tracking-[.2em]">CAT / ARCHIVE SUBJECT</span></div>; }
 
 function Hero() {
-  return <section id="top" className="hero-shell hero-shell-og"><div className="hero-grid absolute inset-0 opacity-45"/><div className="hero-orbit hero-orbit-one"/><div className="hero-orbit hero-orbit-two"/><div className="relative mx-auto grid max-w-[1480px] items-center gap-14 lg:min-h-[calc(100vh-7rem)] lg:grid-cols-[.92fr_1.08fr]"><motion.div initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.7}}><div className="eyebrow"><span className="status-dot"/>OG BeanCat narrative / Arc</div><h1 className="hero-title hero-title-og mt-7">The OG BeanCat<br/><span>on Arc.</span></h1><p className="hero-kicker mt-6">Archived in 2015. Revived on-chain.</p><p className="hero-summary mt-4 max-w-xl text-base font-semibold leading-7 tracking-[-.02em] text-ink/60 md:text-lg">A 2015 Wayback capture shows the old <strong>@arc</strong> handle with a cat avatar and the name <strong>豆</strong>. That public receipt is the lore.</p><div className="hero-proof-tags mt-6"><span>2015 ARCHIVE</span><span>@arc</span><span>豆</span></div><div className="hero-actions mt-7"><ActionLink href={tokenConfig.archiveUrl} className="button button-dark receipt-link">View proof <ArrowUpRight className="link-arrow" size={16}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink><div className="hero-secondary-links">{tokenConfig.xUrl && <ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink>}{tokenConfig.telegramUrl && <ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink>}</div></div><p className="hero-context mt-5 max-w-xl font-mono text-[8px] uppercase leading-5 tracking-[.15em] text-ink/35">Historical @arc account ≠ today&apos;s Arc blockchain.</p></motion.div><Reveal className="relative hero-dossier-wrap"><div className="hero-proof-visual"><ActionLink href={tokenConfig.archiveUrl} className="hero-proof-image"><img src="/archive-proof.png" alt="2015 Wayback capture of the old @arc profile" draggable={false}/></ActionLink><div className="hero-proof-caption"><span>WAYBACK / PUBLIC CAPTURE</span><strong>23 AUG 2015 · 02:23:08 UTC</strong><ActionLink href={tokenConfig.archiveUrl} className="hero-proof-open">OPEN ORIGINAL <ArrowUpRight size={14}/></ActionLink></div></div></Reveal></div><div className="hero-thesis"><span>THE NAME WAS THERE.</span><span>THE CAT WAS THERE.</span><strong>THE RECEIPT IS PUBLIC.</strong></div></section>;
+  return <section id="top" className="meme-hero">
+    <div className="meme-hero-dots"/>
+    <motion.div className="meme-scribble meme-scribble-one" animate={{rotate:[-5,2,-5]}} transition={{duration:5,repeat:Infinity}}>OG?</motion.div>
+    <motion.div className="meme-scribble meme-scribble-two" animate={{y:[0,-8,0]}} transition={{duration:3.8,repeat:Infinity}}>2015!</motion.div>
+    <div className="meme-hero-grid">
+      <motion.div initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{duration:.55}} className="meme-hero-copy">
+        <div className="meme-pill">● THE CAT FROM THE OLD @ARC</div>
+        <h1>BEAN<br/><span>CAT.</span></h1>
+        <p className="meme-hero-line">THE INTERNET LEFT A RECEIPT.</p>
+        <p className="meme-hero-text">A cat. The name <strong>豆</strong>. The old <strong>@arc</strong> handle. Archived in 2015 and now revived as a community meme on Arc.</p>
+        <div className="meme-actions">
+          <ActionLink href={tokenConfig.buyUrl} className="meme-primary">BUY THE CAT <ArrowUpRight size={17}/></ActionLink>
+          <ActionLink href={tokenConfig.archiveUrl} className="meme-secondary">SEE THE RECEIPT</ActionLink>
+        </div>
+        <div className="meme-tiny-row"><span>NO ROADMAP</span><span>NO FAKE LORE</span><span>JUST RECEIPTS</span></div>
+      </motion.div>
+
+      <motion.div className="meme-cat-stage" initial={{opacity:0,scale:.94,rotate:2}} animate={{opacity:1,scale:1,rotate:-1}} transition={{duration:.65,delay:.08}}>
+        <div className="meme-cat-shadow"/>
+        <img src="/mame-cat-original.png" className="meme-main-cat" alt="BeanCat" draggable={false}/>
+        <div className="meme-sticker meme-sticker-arc">ON ARC</div>
+        <div className="meme-sticker meme-sticker-og">OG<br/>BEAN</div>
+        <div className="meme-caption-card"><span>ARCHIVE SUBJECT</span><strong>豆 / BEANCAT</strong></div>
+      </motion.div>
+    </div>
+    <div className="meme-marquee"><div>豆 • BEANCAT • OG LORE • 2015 RECEIPT • ON ARC • 豆 • BEANCAT • OG LORE • 2015 RECEIPT • ON ARC • </div></div>
+  </section>;
 }
 
-function ProofStrip() { return <div className="receipt-line"><div className="receipt-line-inner"><span>PUBLIC RECEIPT</span><strong>@arc</strong><i/> <strong>豆</strong><i/> <strong>CAT</strong><i/> <strong>2015</strong><ActionLink href={tokenConfig.archiveUrl}>WAYBACK ↗</ActionLink></div></div>; }
-
-function Story() {
-  const chapters = [
-    ["01","Before Arc","Years before the current Arc blockchain brand, @arc existed as an unrelated Twitter handle."],
-    ["02","The receipt","On 23 August 2015, Wayback Machine captured that account with a cat avatar and the display name 豆."],
-    ["03","On-chain revival","The archived name and cat later became the basis of a community meme narrative on Arc — with the original public capture still visible today."]
-  ];
-  return <section id="story" className="section-shell story-bg"><SectionLabel number="01 / STORY">The story in plain English</SectionLabel><div className="grid gap-14 lg:grid-cols-[.7fr_1.3fr] lg:gap-24"><Reveal><div className="lg:sticky lg:top-32"><p className="font-mono text-[9px] font-bold uppercase tracking-[.2em] text-seal">No invented mythology</p><h2 className="heading-lg mt-5">Three moments.<br/>One public trail.</h2><p className="mt-6 max-w-md text-sm leading-7 text-ink/55">The point is simple: the historical account came first, the archive preserved it, and the meme came later.</p></div></Reveal><div className="story-editorial">{chapters.map(([n,title,text],i) => <Reveal key={n} delay={i*.05} className="story-editorial-row"><div className="story-editorial-number">{n}</div><div><h3>{title}</h3><p>{text}</p></div></Reveal>)}</div></div></section>;
+function Lore() {
+  return <section id="lore" className="meme-lore">
+    <div className="meme-section-tag">01 / THE LORE</div>
+    <div className="meme-lore-grid">
+      <div className="meme-lore-big"><span>BEFORE<br/>THE TOKEN,</span><strong>THERE<br/>WAS A CAT.</strong></div>
+      <div className="meme-lore-cards">
+        <article><b>2012</b><h3>@arc existed.</h3><p>The handle existed years before today&apos;s Arc blockchain identity.</p></article>
+        <article className="tilt-left"><b>2015</b><h3>豆 got archived.</h3><p>Wayback captured the old @arc profile with the cat avatar and the one-character name 豆.</p></article>
+        <article className="tilt-right"><b>NOW</b><h3>The cat is on-chain.</h3><p>The community picked up the forgotten internet artifact and turned it into Arc-native meme lore.</p></article>
+      </div>
+    </div>
+  </section>;
 }
 
-function Proof() { return <section id="proof" className="section-shell proof-focus"><SectionLabel number="02 / PROOF">The receipt</SectionLabel><Reveal className="proof-hero"><div className="proof-hero-meta"><span>WAYBACK MACHINE / PUBLIC SOURCE</span><strong>23 AUG 2015 · 02:23:08 UTC</strong></div><ActionLink href={tokenConfig.archiveUrl} className="proof-hero-image"><img src="/archive-proof.png" alt="Wayback Machine capture of the old @arc account" draggable={false}/></ActionLink><div className="proof-hero-footer"><div><span>HANDLE</span><strong>@arc</strong></div><div><span>DISPLAY NAME</span><strong>豆</strong></div><div><span>PROFILE</span><strong>CAT AVATAR</strong></div><ActionLink href={tokenConfig.archiveUrl} className="button button-dark">Open original <ArrowUpRight size={15}/></ActionLink></div></Reveal><Reveal className="proof-clue"><CatPortrait/><div><p className="font-mono text-[9px] font-bold uppercase tracking-[.2em] text-seal">The visual clue</p><h3>The cat was already there.</h3><p>The cat comes directly from the archived profile that carried the name 豆. The archive is the centerpiece; everything else is context.</p></div></Reveal></section>; }
+function Receipt() {
+  return <section id="receipt" className="meme-receipt">
+    <div className="meme-section-tag light">02 / RECEIPT OR IT DIDN&apos;T HAPPEN</div>
+    <div className="meme-receipt-grid">
+      <div className="meme-receipt-copy"><p className="meme-kicker">WAYBACK MACHINE / 23 AUG 2015</p><h2>THE<br/>RECEIPT.</h2><p>This is the whole joke and the whole point: the public archive already showed <strong>@arc</strong>, a cat avatar and the name <strong>豆</strong>.</p><ActionLink href={tokenConfig.archiveUrl} className="meme-receipt-button">OPEN ORIGINAL ARCHIVE <ArrowUpRight size={16}/></ActionLink></div>
+      <ActionLink href={tokenConfig.archiveUrl} className="meme-browser-window">
+        <div className="meme-browser-top"><span/><span/><span/><code>web.archive.org / twitter.com/arc</code></div>
+        <img src="/archive-proof.png" alt="Archived @arc profile receipt" draggable={false}/>
+        <div className="meme-browser-note">YES, THAT CAT. YES, THAT 豆.</div>
+      </ActionLink>
+    </div>
+  </section>;
+}
 
-const timeline = [["2012","@arc account existed","The handle existed years before the current Arc blockchain identity."],["2015","Wayback captures 豆","The archived profile shows the cat avatar and the display name 豆."],["LATER","The handle changes hands","@arc eventually becomes associated with the modern Arc brand."],["ON-CHAIN","豆 appears on Arc","The forgotten name becomes an on-chain meme narrative."],["NOW","The archive is revived","The community gives the original-name 豆 a voice again."]];
-function Timeline() { return <section id="timeline" className="section-shell timeline-editorial"><SectionLabel number="03 / TIMELINE">Artifact trail</SectionLabel><Reveal><div className="timeline-editorial-intro"><p className="font-mono text-[9px] font-bold uppercase tracking-[.2em] text-ink/40">Chronology / public trail</p><h2 className="heading-lg mt-5 uppercase">History leaves<br/>a trail.</h2></div></Reveal><div className="timeline-editorial-list">{timeline.map(([date,title,text],index) => <Reveal className="timeline-editorial-row" delay={index*.04} key={date}><div className="timeline-editorial-date">{date}</div><div className="timeline-editorial-copy"><span>0{index+1}</span><h3>{title}</h3><p>{text}</p></div></Reveal>)}</div></section>; }
+function Token() {
+  const [copied, setCopied] = useState(false);
+  async function copyContract() {
+    if (!tokenConfig.contract) return;
+    await navigator.clipboard.writeText(tokenConfig.contract);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1500);
+  }
+  return <section id="token" className="meme-token">
+    <div className="meme-section-tag">03 / GET THE BEAN</div>
+    <div className="meme-token-box">
+      <div className="meme-token-symbol">豆</div>
+      <div className="meme-token-copy"><p>THE OG BEANCAT ON ARC</p><h2>ONE CAT.<br/>ONE RECEIPT.<br/>ONE BEAN.</h2><div className="meme-token-meta"><span>NETWORK <b>{tokenConfig.network}</b></span><span>TICKER <b>{tokenConfig.ticker}</b></span><span>STATUS <b>COMMUNITY REVIVAL</b></span></div><div className="meme-token-actions"><ActionLink href={tokenConfig.buyUrl} className="meme-primary">BUY 豆 <ArrowUpRight size={17}/></ActionLink><button onClick={copyContract} className="meme-secondary">{copied ? <Check size={16}/> : <Copy size={16}/>} {copied ? "COPIED" : "COPY CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="meme-secondary">ARC SCAN ↗</ActionLink></div></div>
+    </div>
+  </section>;
+}
 
-function MemeMoment() { return <section className="meme-moment"><div className="meme-grid absolute inset-0"/><Reveal className="relative mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[1.15fr_.65fr] lg:items-center"><div><p className="font-mono text-[9px] uppercase tracking-[.25em] text-paper/40">Internet memory / on-chain memory</p><p className="mt-8 text-[clamp(4rem,9vw,9rem)] font-black uppercase leading-[.82] tracking-[-.075em]">The internet forgot.<br/><span>The chain didn&apos;t.</span></p><div className="mt-10 flex flex-wrap gap-3 font-mono text-[8px] font-bold uppercase tracking-[.18em]"><span className="meme-tag">2015 / ARCHIVED</span><span className="meme-tag">NOW / ON-CHAIN</span></div></div><div className="relative"><CatPortrait dark/><div className="meme-caption">ARCHIVE SUBJECT / PRESERVED</div></div></Reveal></section>; }
+function Footer() {
+  return <footer className="meme-footer"><div className="meme-footer-title">BEAN<span>CAT</span>豆</div><div className="meme-footer-row"><p>ARCHIVED 2015. REVIVED ON ARC.</p><div><ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>TELEGRAM ↗</ActionLink><ActionLink href={tokenConfig.archiveUrl}>ARCHIVE ↗</ActionLink></div></div><p className="meme-disclaimer">豆 is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account. Nothing here is financial advice.</p></footer>;
+}
 
-function Token() { const [copied,setCopied]=useState(false); const reducedMotion=useReducedMotion(); async function copyContract(){if(!tokenConfig.contract)return;await navigator.clipboard.writeText(tokenConfig.contract);setCopied(true);window.setTimeout(()=>setCopied(false),reducedMotion?500:1800);} const visibleContract=tokenConfig.contract?`${tokenConfig.contract.slice(0,8)}...${tokenConfig.contract.slice(-6)}`:"COMING SOON"; return <section id="token" className="section-shell"><SectionLabel number="04 / TOKEN">On-chain record</SectionLabel><Reveal className="onchain-panel"><div className="onchain-head"><span>ARC / TOKEN RECORD</span><span className="flex items-center gap-2"><i className="status-dot"/>LIVE</span></div><div className="grid lg:grid-cols-[.7fr_1.3fr]"><div className="token-symbol-panel"><span className="font-mono text-[8px] font-bold uppercase tracking-[.2em] text-ink/35">Original-name meme</span><p className="font-display text-[10rem] font-black leading-none">{tokenConfig.name}</p><p className="mt-6 text-3xl font-black uppercase tracking-[-.04em]">Archive lore.<br/>On-chain record.</p></div><div className="p-7 lg:p-10">{[["Network",tokenConfig.network.toUpperCase()],["Contract",visibleContract],["Status","COMMUNITY REVIVAL"]].map(([key,value]) => <div className="token-row" key={key}><span>{key}</span><strong>{value}</strong></div>)}<div className="mt-8 flex flex-wrap gap-3"><button disabled={!tokenConfig.contract} onClick={copyContract} className="button button-dark disabled:opacity-40">{copied?<Check size={15}/>:<Copy size={15}/>} {copied?"Copied":"Copy CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="button button-outline">Arc explorer <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.buyUrl} className="button button-outline">Buy 豆</ActionLink></div></div></div></Reveal></section>; }
-
-function Footer() { const footerLinks=[["X",tokenConfig.xUrl],["Telegram",tokenConfig.telegramUrl],["Explorer",tokenConfig.explorerUrl],["Archive",tokenConfig.archiveUrl],["Buy",tokenConfig.buyUrl]].filter(([,href])=>Boolean(href)); return <footer className="bg-ink px-5 py-14 text-paper md:px-10"><div className="mx-auto max-w-[1440px]"><div className="grid gap-10 border-b border-paper/15 pb-12 md:grid-cols-[1fr_auto]"><div><span className="font-display text-7xl font-black">{tokenConfig.name}</span><p className="mt-5 max-w-md text-sm leading-7 text-paper/45">An archived name. A cat. A public receipt. A community bringing the lore back on Arc.</p></div><nav className="grid grid-cols-2 gap-x-12 gap-y-5 font-mono text-[9px] uppercase tracking-[.18em]">{footerLinks.map(([label,href]) => <ActionLink key={label} href={href} className="hover:text-[#8eabff]">{label} ↗</ActionLink>)}</nav></div><div className="mt-8 flex flex-col gap-4 font-mono text-[8px] uppercase leading-5 tracking-[.12em] text-paper/35 md:flex-row md:justify-between"><p className="max-w-3xl">{tokenConfig.name} is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account.</p><p>Nothing on this website constitutes financial advice.</p></div></div></footer>; }
-
-export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><ProofStrip/><Story/><ArchiveNow/><Proof/><CommunityRevival/><Timeline/><MemeMoment/><Token/><ShareCTA/></main><Footer/></>;}
+export function SitePage() {
+  return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Lore/><Receipt/><Token/></main><Footer/></>;
+}
