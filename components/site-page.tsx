@@ -99,13 +99,17 @@ function Token() {
   async function copy(){if(!tokenConfig.contract)return;await navigator.clipboard.writeText(tokenConfig.contract);setCopied(true);window.setTimeout(()=>setCopied(false),1500)}
   return <section id="token" className="bc-token">
     <div className="bc-section-head"><span>03 / ON-CHAIN</span><p>The archived name, carried forward.</p></div>
-    <div className="bc-token-card">
-      <div className="bc-token-mark">豆</div>
-      <div className="bc-token-info">
+    <div className="bc-token-panel">
+      <div className="bc-token-main">
         <span className="bc-token-eyebrow">BEANCAT / ARC</span>
         <h2>ARCHIVE LORE.<br/><strong>ON-CHAIN.</strong></h2>
-        <div className="bc-token-facts"><div><small>NETWORK</small><b>{tokenConfig.network}</b></div><div><small>TICKER</small><b>{tokenConfig.ticker}</b></div><div><small>STATUS</small><b>COMMUNITY REVIVAL</b></div></div>
+        <p className="bc-token-description">BeanCat carries the archived identity into a community meme on Arc. The story is public, the contract is verifiable, and the source remains open for anyone to check.</p>
         <div className="bc-token-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><button className="bc-outline" onClick={copy}>{copied?<Check size={15}/>:<Copy size={15}/>} {copied?"COPIED":"COPY CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="bc-outline">ARC SCAN <ArrowUpRight size={14}/></ActionLink></div>
+      </div>
+      <div className="bc-token-side">
+        <div className="bc-token-identity"><span>BEANCAT</span><small>COMMUNITY MEME ON ARC</small></div>
+        <div className="bc-token-facts"><div><small>NETWORK</small><b>{tokenConfig.network}</b></div><div><small>TICKER</small><b>{tokenConfig.ticker}</b></div><div><small>STATUS</small><b>COMMUNITY REVIVAL</b></div></div>
+        <div className="bc-contract-card"><small>CONTRACT ADDRESS</small><code>{tokenConfig.contract}</code><button onClick={copy}>{copied?<Check size={14}/>:<Copy size={14}/>} {copied?"COPIED":"COPY"}</button></div>
       </div>
     </div>
   </section>;
