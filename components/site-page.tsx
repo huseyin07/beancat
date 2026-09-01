@@ -32,7 +32,7 @@ function Header() {
 }
 
 function MemeStrip() {
-  const memes = ["/public%3Ameme-1.png", "/public%3Ameme-2.png", "/public%3Ameme-3.png"];
+  const memes = ["/public%3Ameme-1.png", "/public%3Ameme-3.png"];
   return <section className="bc-meme-strip" aria-label="BeanCat memes"><div className="bc-meme-strip-inner">{memes.map((src,i)=><motion.div key={src} className="bc-meme-frame" initial={{opacity:0,y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.2}} transition={{duration:.3,delay:i*.05}}><img src={src} alt={`BeanCat meme ${i+1}`} draggable={false}/></motion.div>)}</div></section>;
 }
 
