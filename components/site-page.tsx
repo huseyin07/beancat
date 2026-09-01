@@ -42,7 +42,12 @@ function Hero() {
     <div className="bc-hero-inner">
       <motion.div className="bc-hero-copy" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.5}}>
         <div className="bc-overline"><span/>BEANCAT · 豆 · ARC</div>
-        <p className="bc-hero-thesis">The historical <strong>@arc</strong> profile appeared with a cat avatar and the name <strong>豆</strong>. Wayback captured it on <strong>23 August 2015</strong>. BeanCat is the community meme built around that archive.</p>
+        <div className="bc-hero-story">
+          <p>The historical <strong>@arc</strong> Twitter profile was captured by the Wayback Machine on <strong>23 August 2015</strong>. In that archived snapshot, the account used a cat avatar and the display name <strong>豆</strong> — the Chinese/Japanese character commonly associated with “bean.”</p>
+          <p>Years later, that forgotten piece of internet history resurfaced. BeanCat takes the original archived identity — the cat, the name 豆, and the old @arc receipt — and turns it into a community meme living on <strong>Arc</strong>.</p>
+          <p className="bc-story-note">The archive is the proof. The meme is the continuation.</p>
+        </div>
+        <div className="bc-hero-facts"><span><small>ARCHIVED</small><strong>2015</strong></span><span><small>HISTORICAL HANDLE</small><strong>@arc</strong></span><span><small>DISPLAY NAME</small><strong>豆</strong></span></div>
         <div className="bc-hero-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><ActionLink href={tokenConfig.archiveUrl} className="bc-outline">VIEW PROOF <ArrowUpRight size={15}/></ActionLink></div>
         <div className="bc-hero-socials"><ActionLink href={tokenConfig.xUrl} className="bc-hero-social-button">X / TWITTER <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.telegramUrl} className="bc-hero-social-button">TELEGRAM <ArrowUpRight size={14}/></ActionLink></div>
       </motion.div>
