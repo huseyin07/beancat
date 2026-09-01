@@ -6,7 +6,7 @@ import { useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
 import { MarketStrip, ContractBar } from "./growth-sections";
 
-const nav = [["LORE", "#lore"], ["RECEIPT", "#receipt"], ["TOKEN", "#token"]];
+const nav = [["Story", "#story"], ["Proof", "#proof"], ["Token", "#token"]];
 
 type ActionLinkProps = { href: string; children: ReactNode; className?: string };
 function ActionLink({ href, children, className = "" }: ActionLinkProps) {
@@ -16,109 +16,102 @@ function ActionLink({ href, children, className = "" }: ActionLinkProps) {
 
 function Header() {
   const [open, setOpen] = useState(false);
-  return <header className="meme-header">
-    <div className="meme-header-inner">
-      <a className="meme-brand" href="#top"><span className="meme-brand-kanji">豆</span><span>BEANCAT</span></a>
-      <nav className="meme-nav">{nav.map(([label, href]) => <a href={href} key={href}>{label}</a>)}</nav>
-      <div className="meme-header-cta">
-        <ActionLink href={tokenConfig.xUrl} className="meme-mini-link">X</ActionLink>
-        <ActionLink href={tokenConfig.telegramUrl} className="meme-mini-link">TG</ActionLink>
-        <ActionLink href={tokenConfig.buyUrl} className="meme-buy">BUY 豆 <ArrowUpRight size={15}/></ActionLink>
+  return <header className="bc-header">
+    <div className="bc-header-inner">
+      <a href="#top" className="bc-brand"><span className="bc-mark">豆</span><span><strong>BEANCAT</strong><small>THE ARCHIVED CAT ON ARC</small></span></a>
+      <nav className="bc-nav">{nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
+      <div className="bc-header-actions">
+        <ActionLink href={tokenConfig.xUrl} className="bc-social">X</ActionLink>
+        <ActionLink href={tokenConfig.telegramUrl} className="bc-social">Telegram</ActionLink>
+        <ActionLink href={tokenConfig.buyUrl} className="bc-buy">Buy 豆 <ArrowUpRight size={14}/></ActionLink>
       </div>
-      <button className="meme-menu" aria-label="Toggle menu" onClick={() => setOpen(v => !v)}>{open ? <X/> : <Menu/>}</button>
+      <button className="bc-menu" aria-label="Toggle menu" onClick={() => setOpen(v => !v)}>{open ? <X/> : <Menu/>}</button>
     </div>
-    <AnimatePresence>{open && <motion.div className="meme-mobile" initial={{height:0, opacity:0}} animate={{height:"auto", opacity:1}} exit={{height:0, opacity:0}}>{nav.map(([label, href]) => <a href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.xUrl}>X / TWITTER ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>TELEGRAM ↗</ActionLink><ActionLink href={tokenConfig.buyUrl}>BUY 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
+    <AnimatePresence>{open && <motion.div className="bc-mobile" initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}}>{nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink><ActionLink href={tokenConfig.buyUrl}>Buy 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
   </header>;
 }
 
 function Hero() {
-  return <section id="top" className="meme-hero">
-    <div className="meme-hero-dots"/>
-    <motion.div className="meme-scribble meme-scribble-one" animate={{rotate:[-5,2,-5]}} transition={{duration:5,repeat:Infinity}}>OG?</motion.div>
-    <motion.div className="meme-scribble meme-scribble-two" animate={{y:[0,-8,0]}} transition={{duration:3.8,repeat:Infinity}}>2015!</motion.div>
-    <div className="meme-hero-grid">
-      <motion.div initial={{opacity:0,y:24}} animate={{opacity:1,y:0}} transition={{duration:.55}} className="meme-hero-copy">
-        <div className="meme-pill">● THE CAT FROM THE OLD @ARC</div>
-        <h1>BEAN<br/><span>CAT.</span></h1>
-        <p className="meme-hero-line">THE INTERNET LEFT A RECEIPT.</p>
-        <p className="meme-hero-text">A cat. The name <strong>豆</strong>. The old <strong>@arc</strong> handle. Archived in 2015 and now revived as a community meme on Arc.</p>
-        <div className="meme-actions">
-          <ActionLink href={tokenConfig.buyUrl} className="meme-primary">BUY THE CAT <ArrowUpRight size={17}/></ActionLink>
-          <ActionLink href={tokenConfig.archiveUrl} className="meme-secondary">SEE THE RECEIPT</ActionLink>
+  return <section id="top" className="bc-hero">
+    <div className="bc-grid-bg"/>
+    <div className="bc-hero-inner">
+      <motion.div className="bc-hero-copy" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.55}}>
+        <div className="bc-overline"><span/>AN INTERNET ARTIFACT, REVIVED ON ARC</div>
+        <h1><span>BEAN</span>CAT</h1>
+        <p className="bc-hero-thesis">Years before today&apos;s Arc blockchain brand, the <strong>@arc</strong> handle was already online — with a cat avatar and the one-character name <strong>豆</strong>.</p>
+        <p className="bc-hero-sub">Wayback Machine preserved it on <strong>23 August 2015</strong>. That forgotten snapshot became the lore behind BeanCat: a community meme revived on Arc, with the original public receipt still intact.</p>
+        <div className="bc-hero-actions">
+          <ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink>
+          <ActionLink href={tokenConfig.archiveUrl} className="bc-outline">VIEW 2015 PROOF <ArrowUpRight size={15}/></ActionLink>
         </div>
-        <div className="meme-social-actions">
-          <ActionLink href={tokenConfig.xUrl} className="meme-social-button">X / TWITTER <ArrowUpRight size={14}/></ActionLink>
-          <ActionLink href={tokenConfig.telegramUrl} className="meme-social-button">TELEGRAM <ArrowUpRight size={14}/></ActionLink>
+        <div className="bc-community-links">
+          <ActionLink href={tokenConfig.xUrl}>X / @BEANCATOG <ArrowUpRight size={13}/></ActionLink>
+          <ActionLink href={tokenConfig.telegramUrl}>TELEGRAM <ArrowUpRight size={13}/></ActionLink>
         </div>
-        <div className="meme-tiny-row"><span>NO ROADMAP</span><span>NO FAKE LORE</span><span>JUST RECEIPTS</span></div>
       </motion.div>
 
-      <motion.div className="meme-cat-stage" initial={{opacity:0,scale:.94,rotate:2}} animate={{opacity:1,scale:1,rotate:-1}} transition={{duration:.65,delay:.08}}>
-        <div className="meme-cat-shadow"/>
-        <img src="/mame-cat-original.png" className="meme-main-cat" alt="BeanCat" draggable={false}/>
-        <div className="meme-sticker meme-sticker-arc">ON ARC</div>
-        <div className="meme-sticker meme-sticker-og">OG<br/>BEAN</div>
-        <ActionLink href={tokenConfig.archiveUrl} className="meme-hero-proof-card">
-          <div className="meme-hero-proof-head"><span>PUBLIC RECEIPT</span><strong>23 AUG 2015</strong></div>
-          <img src="/archive-proof.png" alt="2015 Wayback proof showing the old @arc profile" draggable={false}/>
-          <div className="meme-hero-proof-foot"><span>@arc</span><span>豆</span><span>CAT</span><b>OPEN ↗</b></div>
+      <motion.div className="bc-hero-evidence" initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:.65,delay:.08}}>
+        <div className="bc-evidence-top"><span>ORIGINAL PUBLIC RECEIPT</span><span>WAYBACK / 2015</span></div>
+        <ActionLink href={tokenConfig.archiveUrl} className="bc-proof-frame">
+          <img src="/archive-proof.png" alt="2015 Wayback capture of the historical @arc profile" draggable={false}/>
+          <span className="bc-open-proof">OPEN ORIGINAL <ArrowUpRight size={13}/></span>
         </ActionLink>
-        <div className="meme-caption-card"><span>ARCHIVE SUBJECT</span><strong>豆 / BEANCAT</strong></div>
+        <div className="bc-evidence-bottom">
+          <div><small>HANDLE</small><strong>@arc</strong></div>
+          <div><small>NAME</small><strong>豆</strong></div>
+          <div><small>AVATAR</small><strong>CAT</strong></div>
+          <div><small>CAPTURED</small><strong>23.08.2015</strong></div>
+        </div>
+        <div className="bc-cat-seal"><img src="/mame-cat-original.png" alt="BeanCat"/><span>THE CAT<br/>IN THE RECEIPT</span></div>
       </motion.div>
     </div>
-    <div className="meme-marquee"><div>豆 • BEANCAT • OG LORE • 2015 RECEIPT • ON ARC • 豆 • BEANCAT • OG LORE • 2015 RECEIPT • ON ARC • </div></div>
+    <div className="bc-hero-statement"><span>THE NAME WAS THERE.</span><span>THE CAT WAS THERE.</span><strong>THE RECEIPT IS PUBLIC.</strong></div>
   </section>;
 }
 
-function Lore() {
-  return <section id="lore" className="meme-lore">
-    <div className="meme-section-tag">01 / THE LORE</div>
-    <div className="meme-lore-grid">
-      <div className="meme-lore-big"><span>BEFORE<br/>THE TOKEN,</span><strong>THERE<br/>WAS A CAT.</strong></div>
-      <div className="meme-lore-cards">
-        <article><b>2012</b><h3>@arc existed.</h3><p>The handle existed years before today&apos;s Arc blockchain identity.</p></article>
-        <article className="tilt-left"><b>2015</b><h3>豆 got archived.</h3><p>Wayback captured the old @arc profile with the cat avatar and the one-character name 豆.</p></article>
-        <article className="tilt-right"><b>NOW</b><h3>The cat is on-chain.</h3><p>The community picked up the forgotten internet artifact and turned it into Arc-native meme lore.</p></article>
-      </div>
-    </div>
+function Story() {
+  const items = [
+    ["01", "THE HANDLE", "@arc existed years before the current Arc blockchain identity."],
+    ["02", "THE ARCHIVE", "On 23 August 2015, Wayback captured the profile with a cat avatar and the display name 豆."],
+    ["03", "THE REVIVAL", "The forgotten name and cat were later revived by the community as an on-chain meme on Arc."],
+  ];
+  return <section id="story" className="bc-story">
+    <div className="bc-section-head"><span>01 / STORY</span><p>Three facts. No manufactured mythology.</p></div>
+    <div className="bc-story-title"><p>BEFORE THE MEME,<br/>THERE WAS A RECEIPT.</p><span>BeanCat does not need a fictional origin story. The archive already gave it one.</span></div>
+    <div className="bc-story-list">{items.map(([n,title,text]) => <article key={n}><span>{n}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
   </section>;
 }
 
-function Receipt() {
-  return <section id="receipt" className="meme-receipt">
-    <div className="meme-section-tag light">02 / RECEIPT OR IT DIDN&apos;T HAPPEN</div>
-    <div className="meme-receipt-grid">
-      <div className="meme-receipt-copy"><p className="meme-kicker">WAYBACK MACHINE / 23 AUG 2015</p><h2>THE<br/>RECEIPT.</h2><p>This is the whole joke and the whole point: the public archive already showed <strong>@arc</strong>, a cat avatar and the name <strong>豆</strong>.</p><ActionLink href={tokenConfig.archiveUrl} className="meme-receipt-button">OPEN ORIGINAL ARCHIVE <ArrowUpRight size={16}/></ActionLink></div>
-      <ActionLink href={tokenConfig.archiveUrl} className="meme-browser-window">
-        <div className="meme-browser-top"><span/><span/><span/><code>web.archive.org / twitter.com/arc</code></div>
-        <img src="/archive-proof.png" alt="Archived @arc profile receipt" draggable={false}/>
-        <div className="meme-browser-note">YES, THAT CAT. YES, THAT 豆.</div>
+function Proof() {
+  return <section id="proof" className="bc-proof">
+    <div className="bc-proof-inner">
+      <div className="bc-proof-copy"><span className="bc-light-label">02 / THE PROOF</span><h2>DON&apos;T TRUST<br/>THE LORE.<br/><em>VERIFY IT.</em></h2><p>The archive is not a recreated screenshot or a community-made graphic. It links directly to a Wayback Machine capture of the historical Twitter profile.</p><ActionLink href={tokenConfig.archiveUrl} className="bc-proof-button">OPEN WAYBACK CAPTURE <ArrowUpRight size={16}/></ActionLink></div>
+      <ActionLink href={tokenConfig.archiveUrl} className="bc-browser">
+        <div className="bc-browser-bar"><i/><i/><i/><code>web.archive.org / twitter.com/arc / 20150823022308</code></div>
+        <img src="/archive-proof.png" alt="Wayback Machine evidence" draggable={false}/>
+        <div className="bc-browser-caption"><span>PUBLIC ARCHIVE</span><strong>@arc · 豆 · CAT · 2015</strong></div>
       </ActionLink>
     </div>
   </section>;
 }
 
 function Token() {
-  const [copied, setCopied] = useState(false);
-  async function copyContract() {
-    if (!tokenConfig.contract) return;
-    await navigator.clipboard.writeText(tokenConfig.contract);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1500);
-  }
-  return <section id="token" className="meme-token">
-    <div className="meme-section-tag">03 / GET THE BEAN</div>
-    <div className="meme-token-box">
-      <div className="meme-token-symbol">豆</div>
-      <div className="meme-token-copy"><p>THE OG BEANCAT ON ARC</p><h2>ONE CAT.<br/>ONE RECEIPT.<br/>ONE BEAN.</h2><div className="meme-token-meta"><span>NETWORK <b>{tokenConfig.network}</b></span><span>TICKER <b>{tokenConfig.ticker}</b></span><span>STATUS <b>COMMUNITY REVIVAL</b></span></div><div className="meme-token-actions"><ActionLink href={tokenConfig.buyUrl} className="meme-primary">BUY 豆 <ArrowUpRight size={17}/></ActionLink><button onClick={copyContract} className="meme-secondary">{copied ? <Check size={16}/> : <Copy size={16}/>} {copied ? "COPIED" : "COPY CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="meme-secondary">ARC SCAN ↗</ActionLink></div></div>
+  const [copied,setCopied] = useState(false);
+  async function copy(){if(!tokenConfig.contract)return;await navigator.clipboard.writeText(tokenConfig.contract);setCopied(true);window.setTimeout(()=>setCopied(false),1500)}
+  return <section id="token" className="bc-token">
+    <div className="bc-section-head"><span>03 / ON-CHAIN</span><p>The archived name, carried forward.</p></div>
+    <div className="bc-token-card">
+      <div className="bc-token-mark">豆</div>
+      <div className="bc-token-info">
+        <span className="bc-token-eyebrow">BEANCAT / ARC</span>
+        <h2>THE INTERNET<br/>FORGOT.<br/><strong>THE CHAIN DIDN&apos;T.</strong></h2>
+        <div className="bc-token-facts"><div><small>NETWORK</small><b>{tokenConfig.network}</b></div><div><small>TICKER</small><b>{tokenConfig.ticker}</b></div><div><small>STATUS</small><b>COMMUNITY REVIVAL</b></div></div>
+        <div className="bc-token-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><button className="bc-outline" onClick={copy}>{copied?<Check size={15}/>:<Copy size={15}/>} {copied?"COPIED":"COPY CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="bc-outline">ARC SCAN <ArrowUpRight size={14}/></ActionLink></div>
+      </div>
     </div>
   </section>;
 }
 
-function Footer() {
-  return <footer className="meme-footer"><div className="meme-footer-title">BEAN<span>CAT</span>豆</div><div className="meme-footer-row"><p>ARCHIVED 2015. REVIVED ON ARC.</p><div><ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>TELEGRAM ↗</ActionLink><ActionLink href={tokenConfig.archiveUrl}>ARCHIVE ↗</ActionLink></div></div><p className="meme-disclaimer">豆 is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account. Nothing here is financial advice.</p></footer>;
-}
+function Footer(){return <footer className="bc-footer"><div><a href="#top" className="bc-footer-brand">豆 / BEANCAT</a><p>Archived in 2015. Revived on Arc.</p></div><nav><ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink><ActionLink href={tokenConfig.archiveUrl}>Archive ↗</ActionLink><ActionLink href={tokenConfig.explorerUrl}>Explorer ↗</ActionLink></nav><p className="bc-disclaimer">豆 is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account. Nothing on this website constitutes financial advice.</p></footer>}
 
-export function SitePage() {
-  return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Lore/><Receipt/><Token/></main><Footer/></>;
-}
+export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Story/><Proof/><Token/></main><Footer/></>}
