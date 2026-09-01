@@ -8,7 +8,6 @@ import "./polish.css";
 import "./cute.css";
 import "./editorial.css";
 import "./meme.css";
-import "./hero-proof.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
