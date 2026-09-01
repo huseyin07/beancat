@@ -6,7 +6,7 @@ import { useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
 import { MarketStrip, ContractBar } from "./growth-sections";
 
-const nav = [["Proof", "#proof"], ["Token", "#token"], ["Community", "#community"]];
+const nav = [["Token", "#token"], ["Community", "#community"]];
 
 type ActionLinkProps = { href: string; children: ReactNode; className?: string };
 function ActionLink({ href, children, className = "" }: ActionLinkProps) {
@@ -60,10 +60,6 @@ function Hero() {
   </section>;
 }
 
-function Proof() {
-  return <section id="proof" className="bc-proof live-section"><div className="bc-proof-inner"><div className="bc-proof-copy"><span className="bc-light-label">PROOF</span><h2>VERIFY THE<br/>ORIGINAL<br/><em>ARCHIVE.</em></h2><p>The archive is public and opens directly in Wayback Machine.</p><ActionLink href={tokenConfig.archiveUrl} className="bc-proof-button">OPEN WAYBACK <ArrowUpRight size={16}/></ActionLink></div><ActionLink href={tokenConfig.archiveUrl} className="bc-browser"><div className="bc-browser-bar"><i/><i/><i/><code>web.archive.org / twitter.com/arc / 20150823022308</code></div><img src="/archive-proof.png" alt="Wayback Machine evidence" draggable={false}/><div className="bc-browser-caption"><span>PUBLIC ARCHIVE</span><strong>@arc · 豆 · CAT · 2015</strong></div></ActionLink></div></section>;
-}
-
 function Token() {
   const [copied,setCopied] = useState(false);
   async function copy(){if(!tokenConfig.contract)return;await navigator.clipboard.writeText(tokenConfig.contract);setCopied(true);window.setTimeout(()=>setCopied(false),1500)}
@@ -76,4 +72,4 @@ function Community() {
 
 function Footer(){return <footer className="bc-footer"><div><a href="#top" className="bc-footer-brand">豆 / BEANCAT</a><p>Archived in 2015. Revived on Arc.</p></div><nav><ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink><ActionLink href={tokenConfig.archiveUrl}>Archive ↗</ActionLink><ActionLink href={tokenConfig.explorerUrl}>Explorer ↗</ActionLink></nav><p className="bc-disclaimer">豆 is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account. Nothing on this website constitutes financial advice.</p></footer>}
 
-export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Proof/><Token/><MemeStrip/><Community/></main><Footer/></>}
+export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Token/><MemeStrip/><Community/></main><Footer/></>}
