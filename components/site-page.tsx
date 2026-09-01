@@ -27,7 +27,7 @@ function Header() {
       </div>
       <button className="meme-menu" aria-label="Toggle menu" onClick={() => setOpen(v => !v)}>{open ? <X/> : <Menu/>}</button>
     </div>
-    <AnimatePresence>{open && <motion.div className="meme-mobile" initial={{height:0, opacity:0}} animate={{height:"auto", opacity:1}} exit={{height:0, opacity:0}}>{nav.map(([label, href]) => <a href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.buyUrl}>BUY 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
+    <AnimatePresence>{open && <motion.div className="meme-mobile" initial={{height:0, opacity:0}} animate={{height:"auto", opacity:1}} exit={{height:0, opacity:0}}>{nav.map(([label, href]) => <a href={href} key={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.xUrl}>X / TWITTER ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>TELEGRAM ↗</ActionLink><ActionLink href={tokenConfig.buyUrl}>BUY 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
   </header>;
 }
 
@@ -46,6 +46,10 @@ function Hero() {
           <ActionLink href={tokenConfig.buyUrl} className="meme-primary">BUY THE CAT <ArrowUpRight size={17}/></ActionLink>
           <ActionLink href={tokenConfig.archiveUrl} className="meme-secondary">SEE THE RECEIPT</ActionLink>
         </div>
+        <div className="meme-social-actions">
+          <ActionLink href={tokenConfig.xUrl} className="meme-social-button">X / TWITTER <ArrowUpRight size={14}/></ActionLink>
+          <ActionLink href={tokenConfig.telegramUrl} className="meme-social-button">TELEGRAM <ArrowUpRight size={14}/></ActionLink>
+        </div>
         <div className="meme-tiny-row"><span>NO ROADMAP</span><span>NO FAKE LORE</span><span>JUST RECEIPTS</span></div>
       </motion.div>
 
@@ -54,6 +58,11 @@ function Hero() {
         <img src="/mame-cat-original.png" className="meme-main-cat" alt="BeanCat" draggable={false}/>
         <div className="meme-sticker meme-sticker-arc">ON ARC</div>
         <div className="meme-sticker meme-sticker-og">OG<br/>BEAN</div>
+        <ActionLink href={tokenConfig.archiveUrl} className="meme-hero-proof-card">
+          <div className="meme-hero-proof-head"><span>PUBLIC RECEIPT</span><strong>23 AUG 2015</strong></div>
+          <img src="/archive-proof.png" alt="2015 Wayback proof showing the old @arc profile" draggable={false}/>
+          <div className="meme-hero-proof-foot"><span>@arc</span><span>豆</span><span>CAT</span><b>OPEN ↗</b></div>
+        </ActionLink>
         <div className="meme-caption-card"><span>ARCHIVE SUBJECT</span><strong>豆 / BEANCAT</strong></div>
       </motion.div>
     </div>
