@@ -18,7 +18,7 @@ function Header() {
   const [open, setOpen] = useState(false);
   return <header className="bc-header">
     <div className="bc-header-inner">
-      <a href="#top" className="bc-brand"><span className="bc-mark">豆</span><span><strong>BEANCAT</strong><small>THE ARCHIVED CAT ON ARC</small></span></a>
+      <a href="#top" className="bc-brand"><span className="bc-mark">豆</span><span><strong>BEANCAT</strong><small>ARCHIVED 2015 · REVIVED ON ARC</small></span></a>
       <nav className="bc-nav">{nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
       <div className="bc-header-actions">
         <ActionLink href={tokenConfig.xUrl} className="bc-social">X</ActionLink>
@@ -35,14 +35,15 @@ function Hero() {
   return <section id="top" className="bc-hero">
     <div className="bc-grid-bg"/>
     <div className="bc-hero-inner">
-      <motion.div className="bc-hero-copy" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.55}}>
-        <div className="bc-overline"><span/>AN INTERNET ARTIFACT, REVIVED ON ARC</div>
-        <h1><span>BEAN</span>CAT</h1>
-        <p className="bc-hero-thesis">Years before today&apos;s Arc blockchain brand, the <strong>@arc</strong> handle was already online — with a cat avatar and the one-character name <strong>豆</strong>.</p>
-        <p className="bc-hero-sub">Wayback Machine preserved it on <strong>23 August 2015</strong>. That forgotten snapshot became the lore behind BeanCat: a community meme revived on Arc, with the original public receipt still intact.</p>
+      <motion.div className="bc-hero-copy" initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.5}}>
+        <div className="bc-overline"><span/>BEANCAT · 豆 · ARC</div>
+        <h1>BEANCAT</h1>
+        <p className="bc-hero-kicker">A forgotten internet cat, preserved in 2015 and revived on Arc.</p>
+        <p className="bc-hero-thesis">Before today&apos;s Arc blockchain brand, the historical <strong>@arc</strong> Twitter handle appeared with a cat avatar and the one-character display name <strong>豆</strong>.</p>
+        <p className="bc-hero-sub">Wayback Machine captured that profile on <strong>23 August 2015</strong>. BeanCat is the community meme built around that public archive — not a fictional origin story.</p>
         <div className="bc-hero-actions">
           <ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink>
-          <ActionLink href={tokenConfig.archiveUrl} className="bc-outline">VIEW 2015 PROOF <ArrowUpRight size={15}/></ActionLink>
+          <ActionLink href={tokenConfig.archiveUrl} className="bc-outline">VIEW ORIGINAL PROOF <ArrowUpRight size={15}/></ActionLink>
         </div>
         <div className="bc-community-links">
           <ActionLink href={tokenConfig.xUrl}>X / @BEANCATOG <ArrowUpRight size={13}/></ActionLink>
@@ -50,8 +51,8 @@ function Hero() {
         </div>
       </motion.div>
 
-      <motion.div className="bc-hero-evidence" initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:.65,delay:.08}}>
-        <div className="bc-evidence-top"><span>ORIGINAL PUBLIC RECEIPT</span><span>WAYBACK / 2015</span></div>
+      <motion.div className="bc-hero-evidence" initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.55,delay:.05}}>
+        <div className="bc-evidence-top"><span>2015 WAYBACK CAPTURE</span><span>PUBLIC SOURCE</span></div>
         <ActionLink href={tokenConfig.archiveUrl} className="bc-proof-frame">
           <img src="/archive-proof.png" alt="2015 Wayback capture of the historical @arc profile" draggable={false}/>
           <span className="bc-open-proof">OPEN ORIGINAL <ArrowUpRight size={13}/></span>
@@ -60,12 +61,11 @@ function Hero() {
           <div><small>HANDLE</small><strong>@arc</strong></div>
           <div><small>NAME</small><strong>豆</strong></div>
           <div><small>AVATAR</small><strong>CAT</strong></div>
-          <div><small>CAPTURED</small><strong>23.08.2015</strong></div>
+          <div><small>DATE</small><strong>23.08.2015</strong></div>
         </div>
-        <div className="bc-cat-seal"><img src="/mame-cat-original.png" alt="BeanCat"/><span>THE CAT<br/>IN THE RECEIPT</span></div>
       </motion.div>
     </div>
-    <div className="bc-hero-statement"><span>THE NAME WAS THERE.</span><span>THE CAT WAS THERE.</span><strong>THE RECEIPT IS PUBLIC.</strong></div>
+    <div className="bc-hero-statement"><span>ARCHIVED IN 2015</span><span>PUBLICLY VERIFIABLE</span><strong>REVIVED ON ARC</strong></div>
   </section>;
 }
 
@@ -85,7 +85,7 @@ function Story() {
 function Proof() {
   return <section id="proof" className="bc-proof">
     <div className="bc-proof-inner">
-      <div className="bc-proof-copy"><span className="bc-light-label">02 / THE PROOF</span><h2>DON&apos;T TRUST<br/>THE LORE.<br/><em>VERIFY IT.</em></h2><p>The archive is not a recreated screenshot or a community-made graphic. It links directly to a Wayback Machine capture of the historical Twitter profile.</p><ActionLink href={tokenConfig.archiveUrl} className="bc-proof-button">OPEN WAYBACK CAPTURE <ArrowUpRight size={16}/></ActionLink></div>
+      <div className="bc-proof-copy"><span className="bc-light-label">02 / THE PROOF</span><h2>VERIFY THE<br/>ORIGINAL<br/><em>ARCHIVE.</em></h2><p>The evidence links directly to a Wayback Machine capture of the historical Twitter profile. Anyone can open the source and check it.</p><ActionLink href={tokenConfig.archiveUrl} className="bc-proof-button">OPEN WAYBACK CAPTURE <ArrowUpRight size={16}/></ActionLink></div>
       <ActionLink href={tokenConfig.archiveUrl} className="bc-browser">
         <div className="bc-browser-bar"><i/><i/><i/><code>web.archive.org / twitter.com/arc / 20150823022308</code></div>
         <img src="/archive-proof.png" alt="Wayback Machine evidence" draggable={false}/>
@@ -104,7 +104,7 @@ function Token() {
       <div className="bc-token-mark">豆</div>
       <div className="bc-token-info">
         <span className="bc-token-eyebrow">BEANCAT / ARC</span>
-        <h2>THE INTERNET<br/>FORGOT.<br/><strong>THE CHAIN DIDN&apos;T.</strong></h2>
+        <h2>ARCHIVE LORE.<br/><strong>ON-CHAIN.</strong></h2>
         <div className="bc-token-facts"><div><small>NETWORK</small><b>{tokenConfig.network}</b></div><div><small>TICKER</small><b>{tokenConfig.ticker}</b></div><div><small>STATUS</small><b>COMMUNITY REVIVAL</b></div></div>
         <div className="bc-token-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><button className="bc-outline" onClick={copy}>{copied?<Check size={15}/>:<Copy size={15}/>} {copied?"COPIED":"COPY CA"}</button><ActionLink href={tokenConfig.explorerUrl} className="bc-outline">ARC SCAN <ArrowUpRight size={14}/></ActionLink></div>
       </div>
