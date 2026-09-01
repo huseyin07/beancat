@@ -21,13 +21,13 @@ function Header() {
       <a href="#top" className="bc-brand"><span className="bc-mark">豆</span><span><strong>BEANCAT</strong><small>ARCHIVED 2015 · REVIVED ON ARC</small></span></a>
       <nav className="bc-nav">{nav.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</nav>
       <div className="bc-header-actions">
-        <ActionLink href={tokenConfig.xUrl} className="bc-social">X</ActionLink>
-        <ActionLink href={tokenConfig.telegramUrl} className="bc-social">Telegram</ActionLink>
+        <ActionLink href={tokenConfig.xUrl} className="bc-header-social-button">X / TWITTER <ArrowUpRight size={13}/></ActionLink>
+        <ActionLink href={tokenConfig.telegramUrl} className="bc-header-social-button">TELEGRAM <ArrowUpRight size={13}/></ActionLink>
         <ActionLink href={tokenConfig.buyUrl} className="bc-buy">Buy 豆 <ArrowUpRight size={14}/></ActionLink>
       </div>
       <button className="bc-menu" aria-label="Toggle menu" onClick={() => setOpen(v => !v)}>{open ? <X/> : <Menu/>}</button>
     </div>
-    <AnimatePresence>{open && <motion.div className="bc-mobile" initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}}>{nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink><ActionLink href={tokenConfig.buyUrl}>Buy 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
+    <AnimatePresence>{open && <motion.div className="bc-mobile" initial={{height:0,opacity:0}} animate={{height:"auto",opacity:1}} exit={{height:0,opacity:0}}>{nav.map(([label, href]) => <a key={href} href={href} onClick={() => setOpen(false)}>{label}</a>)}<ActionLink href={tokenConfig.xUrl} className="bc-mobile-social">X / TWITTER ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl} className="bc-mobile-social">TELEGRAM ↗</ActionLink><ActionLink href={tokenConfig.buyUrl}>Buy 豆 ↗</ActionLink></motion.div>}</AnimatePresence>
   </header>;
 }
 
@@ -44,9 +44,9 @@ function Hero() {
           <ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink>
           <ActionLink href={tokenConfig.archiveUrl} className="bc-outline">VIEW ORIGINAL PROOF <ArrowUpRight size={15}/></ActionLink>
         </div>
-        <div className="bc-community-links">
-          <ActionLink href={tokenConfig.xUrl}>X / @BEANCATOG <ArrowUpRight size={13}/></ActionLink>
-          <ActionLink href={tokenConfig.telegramUrl}>TELEGRAM <ArrowUpRight size={13}/></ActionLink>
+        <div className="bc-hero-socials">
+          <ActionLink href={tokenConfig.xUrl} className="bc-hero-social-button">X / TWITTER <ArrowUpRight size={14}/></ActionLink>
+          <ActionLink href={tokenConfig.telegramUrl} className="bc-hero-social-button">TELEGRAM <ArrowUpRight size={14}/></ActionLink>
         </div>
       </motion.div>
 
