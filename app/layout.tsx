@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_JP, Space_Mono } from "next/font/google";
+import { Inter, Space_Mono } from "next/font/google";
+import { CursorGlow } from "@/components/cursor-glow";
 import { ScrollProgress } from "@/components/scroll-progress";
 import "./globals.css";
 import "./growth.css";
@@ -8,7 +9,6 @@ import "./cute.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
-const noto = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "700", "900"], variable: "--font-noto-jp", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://xn--mh3a.online"),
@@ -33,5 +33,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body className={`${inter.variable} ${mono.variable} ${noto.variable}`}><ScrollProgress/>{children}</body></html>;
+  return <html lang="en"><body className={`${inter.variable} ${mono.variable}`}><CursorGlow/><ScrollProgress/>{children}</body></html>;
 }
