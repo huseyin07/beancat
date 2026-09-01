@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Check, Copy, Menu, X } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { tokenConfig } from "@/lib/config";
 import { MarketStrip, ContractBar } from "./growth-sections";
 
@@ -12,6 +12,51 @@ type ActionLinkProps = { href: string; children: ReactNode; className?: string }
 function ActionLink({ href, children, className = "" }: ActionLinkProps) {
   if (!href) return <span className={`${className} opacity-40`} aria-disabled="true">{children}</span>;
   return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{children}</a>;
+}
+
+function MemeStickerLayer() {
+  return <div className="meme-sticker-layer" aria-hidden="true">
+    <span className="meme-bg-sticker sticker-a">2015</span>
+    <span className="meme-bg-sticker sticker-b">@arc</span>
+    <span className="meme-bg-sticker sticker-c">豆</span>
+    <span className="meme-bg-sticker sticker-d">OG CAT</span>
+    <span className="meme-bg-sticker sticker-e">RECEIPT</span>
+    <span className="meme-bg-sticker sticker-f">2015</span>
+    <span className="meme-bg-sticker sticker-g">@arc</span>
+    <span className="meme-bg-sticker sticker-h">OG CAT</span>
+  </div>;
+}
+
+function PeekingCat() {
+  const [visible, setVisible] = useState(false);
+  const [side, setSide] = useState<"left" | "right">("right");
+
+  useEffect(() => {
+    let lastTrigger = 0;
+    let hideTimer: ReturnType<typeof setTimeout> | undefined;
+
+    function onScroll() {
+      const y = window.scrollY;
+      const now = Date.now();
+      if (y < 500 || now - lastTrigger < 4200) return;
+      const marker = Math.floor(y / 650);
+      if (marker % 2 !== 0) return;
+
+      lastTrigger = now;
+      setSide(marker % 4 === 0 ? "right" : "left");
+      setVisible(true);
+      if (hideTimer) clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => setVisible(false), 1800);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (hideTimer) clearTimeout(hideTimer);
+    };
+  }, []);
+
+  return <AnimatePresence>{visible && <motion.div className={`peeking-cat peeking-${side}`} initial={{x:side === "right" ? 120 : -120,opacity:0,rotate:side === "right" ? 7 : -7}} animate={{x:0,opacity:1,rotate:side === "right" ? 3 : -3}} exit={{x:side === "right" ? 120 : -120,opacity:0}} transition={{type:"spring",stiffness:170,damping:18}} aria-hidden="true"><img src="/mame-cat-original.png" alt=""/></motion.div>}</AnimatePresence>;
 }
 
 function Header() {
@@ -80,4 +125,4 @@ function Community() {
 
 function Footer(){return <footer className="bc-footer"><div><a href="#top" className="bc-footer-brand">豆 / BEANCAT</a><p>Archived in 2015. Revived on Arc.</p></div><nav><ActionLink href={tokenConfig.xUrl}>X ↗</ActionLink><ActionLink href={tokenConfig.telegramUrl}>Telegram ↗</ActionLink><ActionLink href={tokenConfig.archiveUrl}>Archive ↗</ActionLink><ActionLink href={tokenConfig.explorerUrl}>Explorer ↗</ActionLink></nav><p className="bc-disclaimer">豆 is a community meme token and is not affiliated with Arc, Circle, or the previous owner of the historical @arc account. Nothing on this website constitutes financial advice.</p></footer>}
 
-export function SitePage(){return <><Header/><main><Hero/><MarketStrip/><ContractBar/><Proof/><Token/><Community/></main><Footer/></>}
+export function SitePage(){return <><MemeStickerLayer/><PeekingCat/><Header/><main><Hero/><MarketStrip/><ContractBar/><Proof/><Token/><Community/></main><Footer/></>}
