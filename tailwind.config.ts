@@ -13,7 +13,7 @@ export default {
       fontFamily: {
         sans: ["var(--font-inter)", "Arial", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-        display: ["var(--font-noto-jp)", "sans-serif"],
+        display: ["var(--font-inter)", "Arial", "sans-serif"],
       },
     },
   },
