@@ -37,7 +37,6 @@ function Hero() {
     <div className="bc-hero-inner">
       <motion.div className="bc-hero-copy" initial={{opacity:0,y:14}} animate={{opacity:1,y:0}} transition={{duration:.5}}>
         <div className="bc-overline"><span/>BEANCAT · 豆 · ARC</div>
-        <h1>BEANCAT</h1>
         <p className="bc-hero-kicker">A forgotten internet cat, preserved in 2015 and revived on Arc.</p>
         <p className="bc-hero-thesis">Before today&apos;s Arc blockchain brand, the historical <strong>@arc</strong> Twitter handle appeared with a cat avatar and the one-character display name <strong>豆</strong>.</p>
         <p className="bc-hero-sub">Wayback Machine captured that profile on <strong>23 August 2015</strong>. BeanCat is the community meme built around that public archive — not a fictional origin story.</p>
