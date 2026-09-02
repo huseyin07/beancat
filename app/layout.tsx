@@ -11,6 +11,7 @@ import "./meme.css";
 import "./balance.css";
 import "./completion.css";
 import "./meme-energy.css";
+import "./header-fix.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = Space_Mono({ subsets: ["latin"], weight: ["400", "700"], variable: "--font-mono", display: "swap" });
