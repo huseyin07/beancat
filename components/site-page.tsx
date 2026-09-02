@@ -48,8 +48,7 @@ function Hero() {
           <p className="bc-story-note">Archived in 2015. Back on Arc.</p>
         </div>
         <div className="bc-hero-facts"><span><small>ARCHIVED</small><strong>2015</strong></span><span><small>HISTORICAL HANDLE</small><strong>@arc</strong></span><span><small>DISPLAY NAME</small><strong>豆</strong></span></div>
-        <div className="bc-hero-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><ActionLink href={tokenConfig.archiveUrl} className="bc-outline bc-proof-cta">VIEW 2015 PROOF <ArrowUpRight size={15}/></ActionLink></div>
-        <div className="bc-hero-socials"><ActionLink href={tokenConfig.xUrl} className="bc-hero-social-button">X / TWITTER <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.telegramUrl} className="bc-hero-social-button">TELEGRAM <ArrowUpRight size={14}/></ActionLink></div>
+        <div className="bc-hero-actions"><ActionLink href={tokenConfig.archiveUrl} className="bc-outline bc-proof-cta">VIEW 2015 PROOF <ArrowUpRight size={15}/></ActionLink></div>
       </motion.div>
       <motion.div className="bc-hero-evidence live-proof" initial={{opacity:0,scale:.97,y:16}} animate={{opacity:1,scale:1,y:0}} transition={{duration:.55,delay:.05}} whileHover={{y:-3}}>
         <div className="bc-evidence-top"><span>2015 WAYBACK CAPTURE</span><span>PUBLIC SOURCE</span></div>
