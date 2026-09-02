@@ -43,17 +43,17 @@ function Hero() {
       <motion.div className="bc-hero-copy" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.5}}>
         <div className="bc-overline"><span/>BEANCAT · 豆 · ARC</div>
         <div className="bc-hero-story">
-          <p>The historical <strong>@arc</strong> Twitter profile was captured by the Wayback Machine on <strong>23 August 2015</strong>. In that archived snapshot, the account used a cat avatar and the display name <strong>豆</strong> — the Chinese/Japanese character commonly associated with “bean.”</p>
-          <p>Years later, that forgotten piece of internet history resurfaced. BeanCat takes the original archived identity — the cat, the name 豆, and the old @arc receipt — and turns it into a community meme living on <strong>Arc</strong>.</p>
-          <p className="bc-story-note">The archive is the proof. The meme is the continuation.</p>
+          <p>The historical <strong>@arc</strong> Twitter profile was captured by the Wayback Machine on <strong>23 August 2015</strong>. In that snapshot, the profile used a cat avatar and the display name <strong>豆</strong> — “bean.”</p>
+          <p>BeanCat is built around that archived internet receipt: the original cat, the name <strong>豆</strong>, and the historical <strong>@arc</strong> profile — now reimagined as a community meme on <strong>Arc</strong>.</p>
+          <p className="bc-story-note">Archived in 2015. Back on Arc.</p>
         </div>
         <div className="bc-hero-facts"><span><small>ARCHIVED</small><strong>2015</strong></span><span><small>HISTORICAL HANDLE</small><strong>@arc</strong></span><span><small>DISPLAY NAME</small><strong>豆</strong></span></div>
-        <div className="bc-hero-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><ActionLink href={tokenConfig.archiveUrl} className="bc-outline">VIEW PROOF <ArrowUpRight size={15}/></ActionLink></div>
+        <div className="bc-hero-actions"><ActionLink href={tokenConfig.buyUrl} className="bc-primary">BUY 豆 <ArrowUpRight size={16}/></ActionLink><ActionLink href={tokenConfig.archiveUrl} className="bc-outline bc-proof-cta">VIEW 2015 PROOF <ArrowUpRight size={15}/></ActionLink></div>
         <div className="bc-hero-socials"><ActionLink href={tokenConfig.xUrl} className="bc-hero-social-button">X / TWITTER <ArrowUpRight size={14}/></ActionLink><ActionLink href={tokenConfig.telegramUrl} className="bc-hero-social-button">TELEGRAM <ArrowUpRight size={14}/></ActionLink></div>
       </motion.div>
       <motion.div className="bc-hero-evidence live-proof" initial={{opacity:0,scale:.97,y:16}} animate={{opacity:1,scale:1,y:0}} transition={{duration:.55,delay:.05}} whileHover={{y:-3}}>
         <div className="bc-evidence-top"><span>2015 WAYBACK CAPTURE</span><span>PUBLIC SOURCE</span></div>
-        <ActionLink href={tokenConfig.archiveUrl} className="bc-proof-frame"><img src="/archive-proof.png" alt="2015 Wayback capture of the historical @arc profile" draggable={false}/><span className="bc-open-proof">OPEN ORIGINAL <ArrowUpRight size={13}/></span></ActionLink>
+        <ActionLink href={tokenConfig.archiveUrl} className="bc-proof-frame"><img src="/archive-proof.png" alt="2015 Wayback capture of the historical @arc profile" draggable={false}/><span className="bc-open-proof">OPEN WAYBACK PROOF <ArrowUpRight size={13}/></span></ActionLink>
         <div className="bc-evidence-bottom"><div><small>HANDLE</small><strong>@arc</strong></div><div><small>NAME</small><strong>豆</strong></div><div><small>AVATAR</small><strong>CAT</strong></div><div><small>DATE</small><strong>23.08.2015</strong></div></div>
       </motion.div>
     </div>
