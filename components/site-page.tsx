@@ -43,9 +43,9 @@ function Hero() {
       <motion.div className="bc-hero-copy" initial={{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{duration:.5}}>
         <div className="bc-overline"><span/>BEANCAT · 豆 · ARC</div>
         <div className="bc-hero-story">
-          <p>The historical <strong>@arc</strong> Twitter profile was captured by the Wayback Machine on <strong>23 August 2015</strong>. In that snapshot, the profile used a cat avatar and the display name <strong>豆</strong> — “bean.”</p>
-          <p>BeanCat is built around that archived internet receipt: the original cat, the name <strong>豆</strong>, and the historical <strong>@arc</strong> profile — now reimagined as a community meme on <strong>Arc</strong>.</p>
-          <p className="bc-story-note">Archived in 2015. Back on Arc.</p>
+          <p style={{fontSize:"16px",lineHeight:1.7,fontWeight:500,color:"#171713",marginBottom:"14px"}}>On <strong>23 August 2015</strong>, the Wayback Machine captured the historical <strong>@arc</strong> Twitter profile. The archived profile featured a cat avatar and the display name <strong>豆</strong> — the character for “bean.”</p>
+          <p style={{fontSize:"14px",lineHeight:1.72,color:"rgba(23,23,19,.68)",maxWidth:"540px"}}>BeanCat carries that archived identity forward: the cat, the name <strong>豆</strong>, and the old <strong>@arc</strong> profile — preserved as internet history and reimagined as a community meme on <strong>Arc</strong>.</p>
+          <p className="bc-story-note">ARCHIVED IN 2015 · REVIVED ON ARC</p>
         </div>
         <div className="bc-hero-facts"><span><small>ARCHIVED</small><strong>2015</strong></span><span><small>HISTORICAL HANDLE</small><strong>@arc</strong></span><span><small>DISPLAY NAME</small><strong>豆</strong></span></div>
         <div className="bc-hero-actions"><ActionLink href={tokenConfig.archiveUrl} className="bc-outline bc-proof-cta">VIEW 2015 PROOF <ArrowUpRight size={15}/></ActionLink></div>
